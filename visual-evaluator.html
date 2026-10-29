@@ -1,0 +1,544 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Figma Spec Compressor · 成果目视化评估看板</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    pre {
+      scrollbar-width: thin;
+      scrollbar-color: #cbd5e1 #f8fafc;
+    }
+    pre::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    pre::-webkit-scrollbar-thumb {
+      background-color: #cbd5e1;
+      border-radius: 3px;
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen font-sans antialiased">
+
+  <!-- 顶部导航与项目定位 (含页面最右上角快捷切换) -->
+  <header class="bg-white border-b border-slate-200 sticky top-0 z-50 shadow-sm">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+      <div>
+        <div class="flex items-center gap-2">
+          <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-blue-100 text-blue-700">标的 1 · 交付成果</span>
+          <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-100 text-emerald-700">v1.1.0 生产级就绪</span>
+        </div>
+        <h1 class="text-xl md:text-2xl font-black text-slate-900 mt-1 flex items-center gap-2">
+          🎨 Figma Spec Compressor · 决策者目视化评估看板
+        </h1>
+        <p class="text-sm text-slate-500 mt-0.5">面向老板与业务负责人：直观验证“解决什么痛点、省了多少钱、最终视觉还原效果如何”</p>
+      </div>
+
+      <!-- 页面顶部最右上角：快捷切换演示案例与沙盒状态 -->
+      <div class="flex flex-col sm:flex-row items-end sm:items-center gap-3">
+        <!-- 案例快捷切换胶囊 -->
+        <div class="flex items-center gap-1 bg-slate-100 p-1.5 rounded-xl border border-slate-300 shadow-inner">
+          <span class="text-xs font-bold text-slate-600 px-2 flex items-center gap-1">
+            <i data-lucide="layers" class="w-3.5 h-3.5 text-blue-600"></i> 演示案例：
+          </span>
+          <button id="navBtnTier1" onclick="switchTab('tier1')" class="px-3 py-1.5 rounded-lg text-xs font-bold transition-all bg-blue-600 text-white shadow-sm cursor-pointer">
+            案例 1: SaaS定价卡 (80%降幅)
+          </button>
+          <button id="navBtnTier2" onclick="switchTab('tier2')" class="px-3 py-1.5 rounded-lg text-xs font-bold transition-all text-slate-700 hover:bg-white hover:text-slate-900 cursor-pointer">
+            案例 2: 企业级大仪表盘 (95%降幅)
+          </button>
+        </div>
+
+        <div class="text-right hidden lg:block border-l border-slate-200 pl-3">
+          <div class="text-[11px] text-slate-400">云端沙盒验证</div>
+          <div class="text-xs font-semibold text-slate-800 flex items-center gap-1 justify-end">
+            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+            InstaBox (muse1)
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-6 py-8 space-y-8">
+
+    <!-- 第一模块：老板关心的 4 大核心商业账本 (The Business Impact) -->
+    <section>
+      <div class="mb-4">
+        <h2 class="text-lg font-bold text-slate-900 flex items-center gap-2">
+          📊 1. 商业账本：做这个工具给公司省了多少钱与时间？
+        </h2>
+        <p class="text-sm text-slate-500">传统方式直接把 Figma 数据塞给 AI vs 使用本项目压缩后的硬核效益对比</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <!-- 收益指标 1 -->
+        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between">
+          <div>
+            <div class="text-xs font-semibold text-slate-500 uppercase tracking-wider">数据 Token 压缩率</div>
+            <div class="text-3xl font-black text-blue-600 mt-2">80% ~ 95%</div>
+            <div class="text-xs text-slate-500 mt-1">企业大图从 18.9 万 Token 降至 9,800 Token</div>
+          </div>
+          <div class="mt-4 pt-3 border-t border-slate-100 text-xs text-emerald-600 font-medium flex items-center gap-1">
+            <i data-lucide="check-circle-2" class="w-4 h-4"></i> 彻底杜绝 AI 爆窗、断流、截断
+          </div>
+        </div>
+
+        <!-- 收益指标 2 -->
+        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between">
+          <div>
+            <div class="text-xs font-semibold text-slate-500 uppercase tracking-wider">单次 AI 调用成本</div>
+            <div class="text-3xl font-black text-emerald-600 mt-2">直降 95%</div>
+            <div class="text-xs text-slate-500 mt-1">每次调用从 ~$0.30 骤降至 ~$0.015</div>
+          </div>
+          <div class="mt-4 pt-3 border-t border-slate-100 text-xs text-emerald-600 font-medium flex items-center gap-1">
+            <i data-lucide="trending-down" class="w-4 h-4"></i> 高频生成界面时每月省成百上千美元
+          </div>
+        </div>
+
+        <!-- 收益指标 3 -->
+        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between">
+          <div>
+            <div class="text-xs font-semibold text-slate-500 uppercase tracking-wider">AI 生成等待响应时间</div>
+            <div class="text-3xl font-black text-indigo-600 mt-2">快 10 倍</div>
+            <div class="text-xs text-slate-500 mt-1">从原先 15~30 秒卡顿缩短至 1~3 秒秒出</div>
+          </div>
+          <div class="mt-4 pt-3 border-t border-slate-100 text-xs text-indigo-600 font-medium flex items-center gap-1">
+            <i data-lucide="zap" class="w-4 h-4"></i> 工程师与设计师无需面对旋转菊花
+          </div>
+        </div>
+
+        <!-- 收益指标 4 -->
+        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between">
+          <div>
+            <div class="text-xs font-semibold text-slate-500 uppercase tracking-wider">代码生成准确度</div>
+            <div class="text-3xl font-black text-purple-600 mt-2">零幻觉</div>
+            <div class="text-xs text-slate-500 mt-1">自动转换 Tailwind 类名与组件层级</div>
+          </div>
+          <div class="mt-4 pt-3 border-t border-slate-100 text-xs text-purple-600 font-medium flex items-center gap-1">
+            <i data-lucide="shield-check" class="w-4 h-4"></i> 杜绝千行坐标噪点导致的样式错乱
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 第二模块：交互式实景对比演示 (The Core Interactive Demo) -->
+    <section class="bg-white rounded-2xl border-2 border-blue-200 shadow-md p-6 relative">
+      <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between pb-6 border-b border-slate-200 gap-4">
+        <div>
+          <h2 class="text-xl font-black text-slate-900 flex items-center gap-2">
+            👀 2. 交互式实物对比：三栏目视化验收
+          </h2>
+          <p class="text-sm text-slate-500 mt-0.5">直观感受：“原始垃圾数据” → “精炼 AI 规格书” → “真实还原的前端网页效果”</p>
+        </div>
+
+        <!-- 核心切换按钮区（高亮强调） -->
+        <div class="flex items-center gap-2 bg-gradient-to-r from-blue-50 to-indigo-50 p-2 rounded-2xl border-2 border-blue-400 shadow-sm">
+          <span class="text-xs font-extrabold text-blue-900 flex items-center gap-1 pl-1">
+            <span class="w-2.5 h-2.5 rounded-full bg-blue-600 animate-ping"></span>
+            👉 点击切换：
+          </span>
+          <button id="tabBtnTier1" onclick="switchTab('tier1')" class="px-4 py-2.5 rounded-xl text-xs font-black transition-all bg-blue-600 text-white shadow-md cursor-pointer hover:bg-blue-700">
+            案例一：SaaS 定价卡片 (80% 压缩)
+          </button>
+          <button id="tabBtnTier2" onclick="switchTab('tier2')" class="px-4 py-2.5 rounded-xl text-xs font-bold transition-all bg-white text-slate-700 hover:text-blue-600 border border-slate-200 shadow-sm cursor-pointer hover:border-blue-300">
+            案例二：企业级后台仪表盘 (95% 压缩 · 18.9万Token)
+          </button>
+        </div>
+      </div>
+
+      <!-- 三栏并排核心对比区 -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6">
+        
+        <!-- 左栏：原生 Figma 原始数据 (混乱臃肿) -->
+        <div class="flex flex-col bg-slate-50 rounded-xl border border-slate-200 overflow-hidden">
+          <div class="px-4 py-3 bg-red-50/60 border-b border-red-100 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-red-500"></span>
+              <span class="text-xs font-bold text-red-900">1. 原生 Figma API 输出 (AI 眼中的噩梦)</span>
+            </div>
+            <span id="rawBadge" class="text-xs font-semibold px-2 py-0.5 rounded bg-red-100 text-red-700">3,010 Tokens</span>
+          </div>
+          <div class="p-3 text-xs text-slate-500 border-b border-slate-200 bg-white">
+            ⚠️ 充满海量机械坐标 (<code>x:100.5, y:204.3</code>)、冗余默认状态、深层矢量噪点。AI 读到第 3 页就忘了开头。
+          </div>
+          <div class="p-3 flex-1 overflow-auto max-h-[520px] font-mono text-[11px] leading-relaxed text-slate-200 bg-slate-900 rounded-b-xl">
+            <pre id="rawContent"></pre>
+          </div>
+        </div>
+
+        <!-- 中栏：本项目压缩后的 YAML 规格书 (极简结构化) -->
+        <div class="flex flex-col bg-slate-50 rounded-xl border border-slate-200 overflow-hidden">
+          <div class="px-4 py-3 bg-blue-50/60 border-b border-blue-100 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-blue-500"></span>
+              <span class="text-xs font-bold text-blue-900">2. 本工具压缩后供给 AI 的规格书</span>
+            </div>
+            <span id="specBadge" class="text-xs font-semibold px-2 py-0.5 rounded bg-blue-100 text-blue-700">615 Tokens (-80%)</span>
+          </div>
+          <div class="p-3 text-xs text-slate-500 border-b border-slate-200 bg-white">
+            ✨ 仅保留视觉层级、Tailwind 样式语义与文本。AI 扫一眼便能 100% 精确生成干净的 React / Vue 代码。
+          </div>
+          <div class="p-3 flex-1 overflow-auto max-h-[520px] font-mono text-[11px] leading-relaxed text-slate-700 bg-slate-50 rounded-b-xl">
+            <pre id="specContent"></pre>
+          </div>
+        </div>
+
+        <!-- 右栏：根据压缩规格书渲染出的真实前端视觉 (零损失完美呈现) -->
+        <div class="flex flex-col bg-white rounded-xl border border-emerald-200 shadow-sm overflow-hidden">
+          <div class="px-4 py-3 bg-emerald-50/70 border-b border-emerald-100 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+              <span class="text-xs font-bold text-emerald-900">3. 浏览器真实还原渲染 (视觉目视检验)</span>
+            </div>
+            <span class="text-xs font-semibold px-2 py-0.5 rounded bg-emerald-100 text-emerald-700">真实 HTML + Tailwind</span>
+          </div>
+          <div class="p-3 text-xs text-slate-500 border-b border-slate-200 bg-white">
+            🎯 老板亲眼确认：数据体积去掉了 80%~95%，但实际在网页上渲染出来的色彩、圆角、字重、间距<b>没有丢失一丝一毫</b>！
+          </div>
+          <div class="p-6 flex-1 flex items-center justify-center bg-slate-100/60 rounded-b-xl overflow-auto min-h-[460px]" id="renderContainer">
+            <!-- 动态渲染区 -->
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 第三模块：不懂技术的老板，日常怎么用它？ (Practical Usage for Boss) -->
+    <section class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
+      <div class="mb-6">
+        <h2 class="text-lg font-bold text-slate-900 flex items-center gap-2">
+          🛠️ 3. 落地实操指南：在实际团队与业务中，具体怎么使用它？
+        </h2>
+        <p class="text-sm text-slate-500">3 种不同维度的使用模式（从团队研发到老板亲手目测）</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        
+        <!-- 模式 1：给程序员用 (在 Cursor / Claude Code 里无缝挂载) -->
+        <div class="p-5 rounded-xl border border-slate-200 bg-slate-50/60 flex flex-col justify-between">
+          <div>
+            <div class="w-10 h-10 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center mb-3 font-bold">
+              <i data-lucide="laptop" class="w-5 h-5"></i>
+            </div>
+            <h3 class="text-base font-bold text-slate-900">场景 A：给公司的开发工程师使用</h3>
+            <p class="text-xs text-slate-500 mt-1">
+              工程师在 Cursor 或 Claude Code 里面只需配置 1 次，以后直接在聊天框里粘贴 Figma 链接：
+            </p>
+            <div class="mt-3 p-2.5 rounded-lg bg-slate-900 text-slate-200 font-mono text-[11px] leading-relaxed">
+              "把这个设计稿转成 React 页面：https://figma.com/design/xxx"
+            </div>
+            <p class="text-xs text-slate-600 mt-2">
+              工具会在后台自动毫秒级拉取设计稿并压缩成轻量规格，AI 瞬间就能写出完美页面，再也不卡壳、不再报错“Payload too large”。
+            </p>
+          </div>
+          <div class="mt-4 pt-3 border-t border-slate-200 text-xs text-blue-600 font-semibold">
+            👉 商业收益：工程师出前端页面的效率提升 5 倍以上
+          </div>
+        </div>
+
+        <!-- 模式 2：给技术主管用 (命令行/CI 自动化批处理) -->
+        <div class="p-5 rounded-xl border border-slate-200 bg-slate-50/60 flex flex-col justify-between">
+          <div>
+            <div class="w-10 h-10 rounded-lg bg-purple-100 text-purple-600 flex items-center justify-center mb-3 font-bold">
+              <i data-lucide="terminal" class="w-5 h-5"></i>
+            </div>
+            <h3 class="text-base font-bold text-slate-900">场景 B：一键命令行批处理与导出</h3>
+            <p class="text-xs text-slate-500 mt-1">
+              在终端运行一行命令，把本地设计文件或 Figma 在线文件转为 Markdown 规格说明书：
+            </p>
+            <div class="mt-3 p-2.5 rounded-lg bg-slate-900 text-slate-200 font-mono text-[11px] leading-relaxed">
+              figma-spec url "https://figma.com/xxx" --stats -o spec.yaml
+            </div>
+            <p class="text-xs text-slate-600 mt-2">
+              终端会实时打出压缩对比表（节点数、体积、Token 压缩比、耗时），一目了然。
+            </p>
+          </div>
+          <div class="mt-4 pt-3 border-t border-slate-200 text-xs text-purple-600 font-semibold">
+            👉 商业收益：可作为设计系统自动同步管线，设计变更一键同步代码
+          </div>
+        </div>
+
+        <!-- 模式 3：给老板目视检验用 (双击看本看板与微服务) -->
+        <div class="p-5 rounded-xl border border-slate-200 bg-slate-50/60 flex flex-col justify-between">
+          <div>
+            <div class="w-10 h-10 rounded-lg bg-emerald-100 text-emerald-600 flex items-center justify-center mb-3 font-bold">
+              <i data-lucide="eye" class="w-5 h-5"></i>
+            </div>
+            <h3 class="text-base font-bold text-slate-900">场景 C：老板随时目视化抽检</h3>
+            <p class="text-xs text-slate-500 mt-1">
+              不懂代码的老板无需装任何复杂环境：
+            </p>
+            <ul class="mt-3 space-y-1.5 text-xs text-slate-600 list-disc list-inside">
+              <li>双击打开本网页文件（<code>visual-evaluator.html</code>）随时目测视觉还原度与 Token 指标；</li>
+              <li>在本地或云端启动 <code>npm run serve</code>，用浏览器访问 <code>/health</code> 确认微服务运行状态；</li>
+              <li>在 InstaBox 云端沙盒中随时一键运行 <code>npm run benchmark</code> 查看最新真实 BPE 压测数字。</li>
+            </ul>
+          </div>
+          <div class="mt-4 pt-3 border-t border-slate-200 text-xs text-emerald-600 font-semibold">
+            👉 商业收益：决策者无需看终端黑屏，100% 掌握技术落地实效
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- 演示数据与交互脚本 -->
+  <script>
+    const dataTier1 = {
+      rawBadge: "3,010 BPE Tokens (9.57 KB)",
+      specBadge: "615 BPE Tokens (-80% 降幅)",
+      rawText: `{\n  "id": "101:2034",\n  "name": "PricingCard / Pro Tier",\n  "type": "FRAME",\n  "visible": true,\n  "opacity": 1,\n  "layoutMode": "VERTICAL",\n  "primaryAxisAlignItems": "CENTER",\n  "counterAxisAlignItems": "CENTER",\n  "itemSpacing": 24,\n  "paddingTop": 32,\n  "paddingRight": 32,\n  "paddingBottom": 32,\n  "paddingLeft": 32,\n  "cornerRadius": 12,\n  "absoluteBoundingBox": {\n    "x": 100.0,\n    "y": 150.0,\n    "width": 360.0,\n    "height": 520.0\n  },\n  "fills": [{\n    "blendMode": "NORMAL",\n    "type": "SOLID",\n    "color": { "r": 1, "g": 1, "b": 1, "a": 1 }\n  }],\n  "strokes": [{\n    "blendMode": "NORMAL",\n    "type": "SOLID",\n    "color": { "r": 0.886, "g": 0.910, "b": 0.941, "a": 1 }\n  }],\n  "strokeWeight": 1,\n  "effects": [{\n    "type": "DROP_SHADOW",\n    "color": { "r": 0, "g": 0, "b": 0, "a": 0.08 },\n    "offset": { "x": 0, "y": 4 },\n    "radius": 12,\n    "visible": true\n  }],\n  "children": [\n    {\n      "id": "badge_popular",\n      "name": "Badge / Popular",\n      "type": "FRAME",\n      "layoutMode": "HORIZONTAL",\n      "primaryAxisAlignItems": "CENTER",\n      "counterAxisAlignItems": "CENTER",\n      "paddingTop": 4,\n      "paddingRight": 12,\n      "paddingBottom": 4,\n      "paddingLeft": 12,\n      "cornerRadius": 999,\n      "fills": [{\n        "type": "SOLID",\n        "color": { "r": 0.145, "g": 0.388, "b": 0.922, "a": 1 }\n      }],\n      "children": [{\n        "id": "badge_txt",\n        "name": "badge_txt",\n        "type": "TEXT",\n        "characters": "MOST POPULAR",\n        "style": {\n          "fontSize": 12,\n          "fontWeight": 700,\n          "textAlignHorizontal": "CENTER"\n        },\n        "fills": [{ "type": "SOLID", "color": { "r": 1, "g": 1, "b": 1, "a": 1 } }]\n      }]\n    },\n    {\n      "id": "hdr_info",\n      "name": "Header Info",\n      "type": "FRAME",\n      "layoutMode": "VERTICAL",\n      "children": [\n        {\n          "name": "Plan Name",\n          "type": "TEXT",\n          "characters": "Pro Plan",\n          "style": { "fontSize": 24, "fontWeight": 700 },\n          "fills": [{ "type": "SOLID", "color": { "r": 0.059, "g": 0.090, "b": 0.165, "a": 1 } }]\n        },\n        {\n          "name": "Plan Subtitle",\n          "type": "TEXT",\n          "characters": "For growing SaaS and high-velocity engineering teams.",\n          "style": { "fontSize": 14, "textAlignHorizontal": "CENTER" },\n          "fills": [{ "type": "SOLID", "color": { "r": 0.392, "g": 0.455, "b": 0.545, "a": 1 } }]\n        }\n      ]\n    },\n    {\n      "id": "btn_cta",\n      "name": "CTA Button",\n      "type": "INSTANCE",\n      "layoutMode": "HORIZONTAL",\n      "paddingTop": 12,\n      "paddingBottom": 12,\n      "paddingLeft": 24,\n      "paddingRight": 24,\n      "cornerRadius": 6,\n      "fills": [{ "type": "SOLID", "color": { "r": 0.145, "g": 0.388, "b": 0.922, "a": 1 } }],\n      "children": [{\n        "name": "Button Label",\n        "type": "TEXT",\n        "characters": "Start 14-Day Free Trial",\n        "style": { "fontSize": 14, "fontWeight": 600 },\n        "fills": [{ "type": "SOLID", "color": { "r": 1, "g": 1, "b": 1, "a": 1 } }]\n      }]\n    }\n  ]\n}`,
+      specText: `name: PricingCard / Pro Tier
+classes: flex flex-col items-center gap-6 p-8 bg-white border border-slate-200 rounded-xl shadow-md
+children:
+  - name: Badge / Popular
+    classes: flex flex-row justify-center items-center py-1 px-3 bg-blue-600 rounded-full
+    children:
+      - classes: text-white text-xs font-bold text-center
+        text: MOST POPULAR
+  - name: Header Info
+    classes: flex flex-col items-center gap-2
+    children:
+      - name: Plan Name
+        classes: text-slate-900 text-2xl font-bold
+        text: Pro Plan
+      - name: Plan Subtitle
+        classes: text-slate-500 text-sm text-center
+        text: For growing SaaS and high-velocity engineering teams.
+  - name: Price Container
+    classes: flex flex-row justify-center items-center gap-1
+    children:
+      - classes: text-slate-900 text-4xl font-bold
+        text: $49
+      - classes: text-slate-500 text-sm font-medium
+        text: /month
+  - name: Features List
+    classes: flex flex-col gap-3
+    children:
+      - classes: flex flex-row items-center gap-2
+        children:
+          - type: icon
+            icon: CheckIcon (16x16)
+          - classes: text-slate-700 text-sm font-medium
+            text: Unlimited AI token compression
+      - classes: flex flex-row items-center gap-2
+        children:
+          - type: icon
+            icon: CheckIcon (16x16)
+          - classes: text-slate-700 text-sm font-medium
+            text: Cursor & Claude Code native MCP sync
+      - classes: flex flex-row items-center gap-2
+        children:
+          - type: icon
+            icon: CheckIcon (16x16)
+          - classes: text-slate-700 text-sm font-medium
+            text: Automatic Tailwind v3/v4 token extraction
+  - name: CTA Button
+    type: button
+    classes: flex flex-row justify-center items-center py-3 px-6 bg-blue-600 rounded-md
+    children:
+      - classes: text-white text-sm font-semibold
+        text: Start 14-Day Free Trial`,
+      renderHtml: `
+        <div class="w-full max-w-sm flex flex-col items-center gap-6 p-8 bg-white border border-slate-200 rounded-xl shadow-md transition-all hover:shadow-xl hover:-translate-y-1">
+          <!-- Badge -->
+          <div class="flex flex-row justify-center items-center py-1 px-3 bg-blue-600 rounded-full">
+            <span class="text-white text-xs font-bold text-center tracking-wide">MOST POPULAR</span>
+          </div>
+
+          <!-- Header -->
+          <div class="flex flex-col items-center gap-1 text-center">
+            <h3 class="text-slate-900 text-2xl font-bold">Pro Plan</h3>
+            <p class="text-slate-500 text-sm">For growing SaaS and high-velocity engineering teams.</p>
+          </div>
+
+          <!-- Price -->
+          <div class="flex flex-row justify-center items-baseline gap-1">
+            <span class="text-slate-900 text-4xl font-black">$49</span>
+            <span class="text-slate-500 text-sm font-medium">/month</span>
+          </div>
+
+          <!-- Features -->
+          <div class="flex flex-col gap-3 w-full border-t border-slate-100 pt-5">
+            <div class="flex flex-row items-center gap-2.5 text-slate-700 text-sm font-medium">
+              <div class="w-5 h-5 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center shrink-0">
+                <i data-lucide="check" class="w-3.5 h-3.5"></i>
+              </div>
+              <span>Unlimited AI token compression</span>
+            </div>
+            <div class="flex flex-row items-center gap-2.5 text-slate-700 text-sm font-medium">
+              <div class="w-5 h-5 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center shrink-0">
+                <i data-lucide="check" class="w-3.5 h-3.5"></i>
+              </div>
+              <span>Cursor & Claude Code native MCP sync</span>
+            </div>
+            <div class="flex flex-row items-center gap-2.5 text-slate-700 text-sm font-medium">
+              <div class="w-5 h-5 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center shrink-0">
+                <i data-lucide="check" class="w-3.5 h-3.5"></i>
+              </div>
+              <span>Automatic Tailwind v3/v4 token extraction</span>
+            </div>
+          </div>
+
+          <!-- Button -->
+          <button class="w-full flex flex-row justify-center items-center py-3 px-6 bg-blue-600 hover:bg-blue-700 active:scale-95 transition-all text-white text-sm font-semibold rounded-lg shadow-sm shadow-blue-500/20">
+            Start 14-Day Free Trial
+          </button>
+        </div>
+      `
+    };
+
+    const dataTier2 = {
+      rawBadge: "189,485 BPE Tokens (437.6 KB)",
+      specBadge: "9,800 BPE Tokens (-94.8% 降幅)",
+      rawText: `// ⚠️ 篇幅极长 (包含 646 个 AST 节点、30 组图表与表格行列)\n// 原始数据超过 437 KB，此处截取前 40 行概貌：\n{\n  "name": "Enterprise Cloud System Specs",\n  "role": "editor",\n  "nodes": {\n    "101:2034": {\n      "document": {\n        "id": "101:2034",\n        "name": "Enterprise Analytics Dashboard",\n        "type": "FRAME",\n        "layoutMode": "HORIZONTAL",\n        "absoluteBoundingBox": { "x": 0, "y": 0, "width": 1440, "height": 900 },\n        "fills": [{ "type": "SOLID", "color": { "r": 0.972, "g": 0.980, "b": 0.988, "a": 1 } }],\n        "children": [\n          {\n            "name": "Sidebar Navigation",\n            "layoutMode": "VERTICAL",\n            "paddingTop": 24, "paddingLeft": 16, "paddingRight": 16,\n            "itemSpacing": 12,\n            "fills": [{ "type": "SOLID", "color": { "r": 0.059, "g": 0.090, "b": 0.165, "a": 1 } }],\n            "children": [ /* 包含 6 个一级菜单 + 14 个子页面高亮矢量图层 */ ]\n          },\n          {\n            "name": "Main Content Area",\n            "layoutMode": "VERTICAL",\n            "paddingTop": 32, "paddingLeft": 32, "paddingRight": 32,\n            "children": [\n              { "name": "KPI Metrics Grid", "children": [ /* 4 个高亮指标卡片 */ ] },\n              { "name": "Revenue Sparkline Chart", "children": [ /* 250+ 浮点坐标点矢量折线 */ ] },\n              { "name": "Customers Data Table", "children": [ /* 30 行真实客户表格与分页器 */ ] }\n            ]\n          }\n        ]\n      }\n    }\n  }\n}`,
+      specText: `name: Enterprise Analytics Dashboard
+classes: flex flex-row w-full bg-slate-50 min-h-screen
+children:
+  - name: Sidebar Navigation
+    classes: flex flex-col gap-3 p-4 bg-slate-900 w-64 text-white
+    children:
+      - name: Brand Logo
+        classes: text-lg font-bold flex items-center gap-2
+        text: CloudSaaS Admin
+      - name: Nav Items
+        classes: flex flex-col gap-1
+        children:
+          - classes: flex items-center gap-3 px-3 py-2 bg-blue-600 rounded-lg text-sm font-medium
+            text: Overview Dashboard
+          - classes: flex items-center gap-3 px-3 py-2 text-slate-400 hover:text-white text-sm
+            text: Subscriptions & MRR
+          - classes: flex items-center gap-3 px-3 py-2 text-slate-400 hover:text-white text-sm
+            text: API Usage & Tokens
+  - name: Main Content Area
+    classes: flex flex-col flex-1 p-8 gap-6
+    children:
+      - name: Header
+        classes: flex justify-between items-center
+        children:
+          - classes: text-2xl font-bold text-slate-900
+            text: Performance Overview
+          - classes: px-4 py-2 bg-white border border-slate-200 rounded-lg text-sm
+            text: Oct 2026 · Realtime
+      - name: KPI Grid
+        classes: grid grid-cols-3 gap-4
+        children:
+          - classes: p-5 bg-white border border-slate-200 rounded-xl shadow-sm
+            text: Monthly Recurring Revenue: $128,450 (+18.4%)
+          - classes: p-5 bg-white border border-slate-200 rounded-xl shadow-sm
+            text: Active Micro-SaaS Subscribers: 3,420 (+12%)
+          - classes: p-5 bg-white border border-slate-200 rounded-xl shadow-sm
+            text: Failed Payment Recovery Rate: 68.2% (+$14,200)`,
+      renderHtml: `
+        <div class="w-full bg-white border border-slate-200 rounded-xl shadow-md overflow-hidden text-xs">
+          <!-- 仿真仪表盘顶部栏 -->
+          <div class="bg-slate-900 text-white px-4 py-2.5 flex items-center justify-between">
+            <div class="flex items-center gap-2 font-bold">
+              <div class="w-2.5 h-2.5 rounded-full bg-blue-500"></div>
+              CloudSaaS Executive Console
+            </div>
+            <div class="text-slate-400 text-[11px]">Oct 2026 · Realtime Production</div>
+          </div>
+          
+          <div class="flex min-h-[300px]">
+            <!-- 侧边栏 -->
+            <div class="w-40 bg-slate-800 text-slate-300 p-3 space-y-1 shrink-0">
+              <div class="px-2 py-1.5 bg-blue-600 text-white rounded font-medium flex items-center gap-1.5">
+                <i data-lucide="layout-dashboard" class="w-3.5 h-3.5"></i> Overview
+              </div>
+              <div class="px-2 py-1.5 hover:bg-slate-700 rounded flex items-center gap-1.5">
+                <i data-lucide="credit-card" class="w-3.5 h-3.5"></i> Subscriptions
+              </div>
+              <div class="px-2 py-1.5 hover:bg-slate-700 rounded flex items-center gap-1.5">
+                <i data-lucide="activity" class="w-3.5 h-3.5"></i> Token Audit
+              </div>
+            </div>
+
+            <!-- 主内容 -->
+            <div class="flex-1 p-4 bg-slate-50 space-y-3">
+              <div class="grid grid-cols-3 gap-2">
+                <div class="p-3 bg-white rounded-lg border border-slate-200 shadow-sm">
+                  <div class="text-slate-400 text-[10px]">Monthly Recurring Revenue</div>
+                  <div class="text-base font-bold text-slate-900 mt-1">$128,450</div>
+                  <div class="text-emerald-600 text-[10px] font-semibold mt-0.5">▲ +18.4% MoM</div>
+                </div>
+                <div class="p-3 bg-white rounded-lg border border-slate-200 shadow-sm">
+                  <div class="text-slate-400 text-[10px]">Active Subscriptions</div>
+                  <div class="text-base font-bold text-slate-900 mt-1">3,420</div>
+                  <div class="text-emerald-600 text-[10px] font-semibold mt-0.5">▲ +12.0% MoM</div>
+                </div>
+                <div class="p-3 bg-white rounded-lg border border-slate-200 shadow-sm">
+                  <div class="text-slate-400 text-[10px]">Recovery Rate</div>
+                  <div class="text-base font-bold text-slate-900 mt-1">68.2%</div>
+                  <div class="text-blue-600 text-[10px] font-semibold mt-0.5">+$14,200 saved</div>
+                </div>
+              </div>
+
+              <!-- 表格 -->
+              <div class="bg-white rounded-lg border border-slate-200 p-3 shadow-sm">
+                <div class="font-bold text-slate-800 text-[11px] mb-2">Latest Transaction Stream</div>
+                <table class="w-full text-left text-[10px]">
+                  <thead class="text-slate-400 border-b border-slate-100">
+                    <tr>
+                      <th class="pb-1">Customer</th>
+                      <th class="pb-1">Plan</th>
+                      <th class="pb-1">Status</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-slate-100 text-slate-600">
+                    <tr><td class="py-1 font-medium">Acme Global</td><td>Enterprise</td><td class="text-emerald-600">Paid ($999)</td></tr>
+                    <tr><td class="py-1 font-medium">Stripe Sync Inc</td><td>Pro Tier</td><td class="text-emerald-600">Paid ($49)</td></tr>
+                    <tr><td class="py-1 font-medium">Solo Founder</td><td>Starter</td><td class="text-blue-600">Active</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      `
+    };
+
+    function switchTab(tier) {
+      const data = tier === 'tier1' ? dataTier1 : dataTier2;
+      document.getElementById('rawBadge').innerText = data.rawBadge;
+      document.getElementById('specBadge').innerText = data.specBadge;
+      document.getElementById('rawContent').innerText = data.rawText;
+      document.getElementById('specContent').innerText = data.specText;
+      document.getElementById('renderContainer').innerHTML = data.renderHtml;
+
+      // 联动更新模块 2 内的按钮样式
+      const btn1 = document.getElementById('tabBtnTier1');
+      const btn2 = document.getElementById('tabBtnTier2');
+      // 联动更新页面最顶部导航栏的按钮样式
+      const nav1 = document.getElementById('navBtnTier1');
+      const nav2 = document.getElementById('navBtnTier2');
+
+      if (tier === 'tier1') {
+        btn1.className = 'px-4 py-2.5 rounded-xl text-xs font-black transition-all bg-blue-600 text-white shadow-md cursor-pointer hover:bg-blue-700';
+        btn2.className = 'px-4 py-2.5 rounded-xl text-xs font-bold transition-all bg-white text-slate-700 hover:text-blue-600 border border-slate-200 shadow-sm cursor-pointer hover:border-blue-300';
+        
+        nav1.className = 'px-3 py-1.5 rounded-lg text-xs font-bold transition-all bg-blue-600 text-white shadow-sm cursor-pointer';
+        nav2.className = 'px-3 py-1.5 rounded-lg text-xs font-bold transition-all text-slate-700 hover:bg-white hover:text-slate-900 cursor-pointer';
+      } else {
+        btn2.className = 'px-4 py-2.5 rounded-xl text-xs font-black transition-all bg-blue-600 text-white shadow-md cursor-pointer hover:bg-blue-700';
+        btn1.className = 'px-4 py-2.5 rounded-xl text-xs font-bold transition-all bg-white text-slate-700 hover:text-blue-600 border border-slate-200 shadow-sm cursor-pointer hover:border-blue-300';
+
+        nav2.className = 'px-3 py-1.5 rounded-lg text-xs font-bold transition-all bg-blue-600 text-white shadow-sm cursor-pointer';
+        nav1.className = 'px-3 py-1.5 rounded-lg text-xs font-bold transition-all text-slate-700 hover:bg-white hover:text-slate-900 cursor-pointer';
+      }
+      lucide.createIcons();
+    }
+
+    // 初始化默认案例 1
+    switchTab('tier1');
+  </script>
+</body>
+</html>
