@@ -10,6 +10,7 @@
   "scripts": {
     "build": "tsc",
     "build:commercial": "node --import tsx scripts/build-commercial.ts",
+    "package:commercial": "node --import tsx scripts/package-release.ts",
     "test": "node --import tsx --test tests/compressor.test.ts tests/mcp-and-scale.test.ts tests/commercial.test.ts",
     "benchmark": "node --import tsx tests/benchmark.ts",
     "start": "node --import tsx src/cli.ts",

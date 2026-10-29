@@ -13,7 +13,7 @@ export class CommercialLicenseError extends Error {
     super(
       `[COMMERCIAL LICENSE ERROR] ${message}\n` +
       `Please provide a valid license key via --license <key> or set FIGMA_SPEC_LICENSE_KEY environment variable.\n` +
-      `To purchase a Pro Lifetime License ($29), visit: https://lemonsqueezy.com`
+      `To purchase a Pro Lifetime License ($29), visit: https://creem.io`
     );
     this.name = 'CommercialLicenseError';
   }

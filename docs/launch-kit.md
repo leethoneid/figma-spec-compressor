@@ -1,23 +1,30 @@
-﻿# Figma Spec Compressor · Global GTM & Launch Copy Kit
+# Figma Spec Compressor · Global GTM & Launch Copy Kit
 > Ready-to-copy marketing assets, launch threads, and payment setup SOP for Solo Overseas monetization.
 
 ---
 
-## 1. Lemon Squeezy 5-Minute Setup SOP (收款配置指南)
+## 1. Creem.io 5-Minute Setup SOP (中国个人收款配置指南 · 支付宝打款)
 
-### Step 1: Create Store & Product
-1. Sign up / Log in to [Lemon Squeezy](https://lemonsqueezy.com) (supports individuals without a US entity, payouts via Stripe / Wise / PayPal).
-2. Go to **Store** -> **Products** -> **New Product**:
+### Step 1: 注册与结算配置 (中国身份证 + 支付宝)
+1. 访问并注册 [Creem.io](https://creem.io)（专为出海开发者设计的 MoR 代收代缴平台）。
+2. 在账号认证中选择 **Individual (个人开发者)**，填写大陆个人身份证信息完成合规审核（无需境外公司）。
+3. 在 **Payout Settings（打款设置）** 中：
+   - 结算方式选择 **Alipay（支付宝人民币）**；
+   - 绑定您的实名支付宝账号与姓名。
+   - **特点**：每次结账直接打款至支付宝，不占用每年 5 万美元外汇限额，合规代扣国际增值税。
+
+### Step 2: 创建数字商品与授权码
+1. 进入 **Products** -> **New Product**：
    - **Name**: `Figma Spec Compressor Pro (Lifetime License)`
-   - **Price**: `$29.00` (One-time payment)
-   - **Tax Category**: `Digital Goods / SaaS Software`
+   - **Price**: `$29.00` (One-time payment / 单次买断)
+   - **Product Type**: `Digital Download / License Key`
    - **Description**: 
      > Token-optimized Model Context Protocol (MCP) server for Cursor & Claude Code. Prunes raw Figma API payloads by 80%–95% in 50ms. Lifetime access to MCP server binaries, updates, and Tailwind prompt kits.
-3. In **Files / Redirects**:
-   - Set **Redirect URL** to your private repository or GitHub releases: `https://github.com/leethoneid/figma-spec-compressor`
-   - Add License Key generation: Enable **Generate License Keys** (Single seat).
-4. Copy your **Checkout Link** (e.g., `https://yourstore.lemonsqueezy.com/buy/...`).
-5. Replace `https://lemonsqueezy.com` in `site/index.html` with your actual checkout link!
+2. 在 **Fulfillment（履约交付）** 设置：
+   - **File Upload**: 上传编译好的加固发布压缩包 `figma-spec-pro-v1.1.0.zip`（由 `npm run package:commercial` 一键生成）；
+   - **License Keys**: 开启 **"Generate License Keys"**（单码限 2 台设备绑定）。
+3. 复制生成的专属收银台链接（Checkout URL，如 `https://checkout.creem.io/...`）。
+4. 将该链接粘贴替换到 `site/index.html` 中的购买按钮！
 
 ---
 

@@ -108,9 +108,9 @@ export function verifyOfflineLicenseToken(
 }
 
 /**
- * Validates a Lemon Squeezy standard license key via official API.
+ * Validates a Merchant of Record (Creem / Lemon Squeezy) standard license key via activation API.
  */
-export async function verifyLemonSqueezyLicense(
+export async function verifyMoRLicense(
   licenseKey: string,
   options?: {
     instanceName?: string;
@@ -120,7 +120,7 @@ export async function verifyLemonSqueezyLicense(
 ): Promise<LicenseVerificationResult> {
   const instanceName = options?.instanceName || os.hostname();
   const fetcher = options?.fetchImpl || fetch;
-  const url = options?.apiUrl || 'https://api.lemonsqueezy.com/v1/licenses/activate';
+  const url = options?.apiUrl || process.env.CREEM_API_URL || process.env.MOR_API_URL || 'https://api.creem.io/v1/licenses/activate';
 
   try {
     const res = await fetcher(url, {
@@ -139,21 +139,23 @@ export async function verifyLemonSqueezyLicense(
     if (data?.activated === true || data?.valid === true) {
       return {
         valid: true,
-        buyerId: data?.meta?.customer_email || data?.license_key?.user_name || 'verified-customer'
+        buyerId: data?.meta?.customer_email || data?.customer_email || data?.license_key?.user_name || 'verified-customer'
       };
     }
 
     return {
       valid: false,
-      reason: data?.error || 'Invalid or exhausted license key on Lemon Squeezy.'
+      reason: data?.error || 'Invalid or exhausted license key.'
     };
   } catch (err: any) {
     return {
       valid: false,
-      reason: `Lemon Squeezy API communication failure: ${err?.message || err}`
+      reason: `MoR license activation failure: ${err?.message || err}`
     };
   }
 }
+
+export const verifyLemonSqueezyLicense = verifyMoRLicense;
 
 /**
  * Checks local activation cache. If valid and verified within 14 days on the same machine, grants access.
