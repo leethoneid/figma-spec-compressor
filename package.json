@@ -9,7 +9,7 @@
   "type": "module",
   "scripts": {
     "build": "tsc",
-    "test": "node --import tsx --test tests/**/*.test.ts",
+    "test": "node --import tsx --test tests/compressor.test.ts tests/mcp-and-scale.test.ts",
     "benchmark": "node --import tsx tests/benchmark.ts",
     "start": "node --import tsx src/cli.ts",
     "mcp": "node --import tsx src/cli.ts mcp",

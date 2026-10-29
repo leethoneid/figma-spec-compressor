@@ -15,7 +15,7 @@ export function rgbaToHex(color?: FigmaColor, opacity: number = 1): string | nul
   return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
 }
 
-export function mapColorToTailwind(hex: string, prefix: 'bg' | 'text' | 'border'): string {
+export function mapColorToTailwind(hex: string, prefix: 'bg' | 'text' | 'border' | 'from' | 'to' | string): string {
   const commonColors: Record<string, string> = {
     '#ffffff': `${prefix}-white`,
     '#000000': `${prefix}-black`,
@@ -49,7 +49,7 @@ export function mapColorToTailwind(hex: string, prefix: 'bg' | 'text' | 'border'
 
 export function mapSpacing(px?: number): number | null {
   if (px === undefined || px === 0) return 0;
-  // Standard 4px grid: 4px = 1, 8px = 2, 12px = 3, 16px = 4, 20px = 5, 24px = 6, 32px = 8, 40px = 10, 48px = 12
+  // Standard 4px grid: 4px = 1, 8px = 2, 12px = 3, 16px = 4, 20px = 5, 24px = 6, 28px = 7, 32px = 8, 36px = 9, 40px = 10, 48px = 12, 64: 16
   const scale: Record<number, number> = {
     4: 1, 8: 2, 12: 3, 16: 4, 20: 5, 24: 6, 28: 7, 32: 8, 36: 9, 40: 10, 48: 12, 64: 16
   };
@@ -86,11 +86,23 @@ export function mapTypography(style?: FigmaTypeStyle): string[] {
   // Text align
   if (style.textAlignHorizontal === 'CENTER') classes.push('text-center');
   else if (style.textAlignHorizontal === 'RIGHT') classes.push('text-right');
+  else if (style.textAlignHorizontal === 'JUSTIFIED') classes.push('text-justify');
 
   return classes;
 }
 
-export function mapNodeToClasses(node: RawFigmaNode): string[] {
+function mapRadiusClass(r: number, prefix: string = 'rounded'): string {
+  const suffix = (s: string) => (prefix === 'rounded' ? (s === '' ? 'rounded' : `rounded-${s}`) : (s === '' ? prefix : `${prefix}-${s}`));
+  if (r <= 4) return suffix('');
+  if (r <= 8) return suffix('md');
+  if (r <= 12) return suffix('lg');
+  if (r <= 16) return suffix('xl');
+  if (r <= 24) return suffix('2xl');
+  if (r >= 999) return suffix('full');
+  return `${prefix}-[${r}px]`;
+}
+
+export function mapNodeToClasses(node: RawFigmaNode, parentLayoutMode?: 'NONE' | 'HORIZONTAL' | 'VERTICAL'): string[] {
   const classes: string[] = [];
 
   // 1. Layout Mode (Flexbox)
@@ -98,6 +110,11 @@ export function mapNodeToClasses(node: RawFigmaNode): string[] {
     classes.push('flex', 'flex-row');
   } else if (node.layoutMode === 'VERTICAL') {
     classes.push('flex', 'flex-col');
+  }
+
+  // Flex Wrap
+  if (node.layoutWrap === 'WRAP' && (node.layoutMode === 'HORIZONTAL' || node.layoutMode === 'VERTICAL')) {
+    classes.push('flex-wrap');
   }
 
   // Alignment
@@ -115,6 +132,43 @@ export function mapNodeToClasses(node: RawFigmaNode): string[] {
       const gap = mapSpacing(node.itemSpacing);
       if (gap !== null) classes.push(`gap-${gap}`);
       else classes.push(`gap-[${node.itemSpacing}px]`);
+    }
+  }
+
+  // Sizing Constraints
+  // Horizontal
+  if (node.layoutSizingHorizontal === 'FILL') {
+    classes.push(parentLayoutMode === 'HORIZONTAL' ? 'flex-1' : 'w-full');
+  } else if (parentLayoutMode === 'VERTICAL' && node.layoutAlign === 'STRETCH') {
+    classes.push('w-full');
+  } else if (parentLayoutMode === 'HORIZONTAL' && node.layoutGrow === 1) {
+    classes.push('flex-1');
+  } else if (node.layoutSizingHorizontal === 'FIXED') {
+    const width = node.size?.x ?? node.absoluteBoundingBox?.width;
+    if (width && width > 0) {
+      const w = Math.round(width);
+      const s = mapSpacing(w);
+      if (w % 4 === 0 && w <= 64 && s !== null) {
+        classes.push(`w-${s}`);
+      } else {
+        classes.push(`w-[${w}px]`);
+      }
+    }
+  }
+
+  // Vertical
+  if (node.layoutSizingVertical === 'FILL' || (parentLayoutMode === 'HORIZONTAL' && node.layoutAlign === 'STRETCH')) {
+    classes.push('h-full');
+  } else if (node.layoutSizingVertical === 'FIXED') {
+    const height = node.size?.y ?? node.absoluteBoundingBox?.height;
+    if (height && height > 0) {
+      const h = Math.round(height);
+      const s = mapSpacing(h);
+      if (h % 4 === 0 && h <= 64 && s !== null) {
+        classes.push(`h-${s}`);
+      } else {
+        classes.push(`h-[${h}px]`);
+      }
     }
   }
 
@@ -146,8 +200,9 @@ export function mapNodeToClasses(node: RawFigmaNode): string[] {
     }
   }
 
-  // 3. Fills (Background)
+  // 3. Fills (Background & Gradient)
   if (node.fills && Array.isArray(node.fills)) {
+    // Solid fill
     const visibleFill = node.fills.find((f: FigmaPaint) => f.visible !== false && f.type === 'SOLID');
     if (visibleFill && visibleFill.color) {
       const hex = rgbaToHex(visibleFill.color, visibleFill.opacity ?? 1);
@@ -158,6 +213,28 @@ export function mapNodeToClasses(node: RawFigmaNode): string[] {
           classes.push(mapColorToTailwind(hex, 'bg'));
         }
       }
+    }
+
+    // Gradient fill
+    const visibleGradient = node.fills.find(
+      (f: FigmaPaint) => f.visible !== false && (f.type === 'GRADIENT_LINEAR' || f.type === 'GRADIENT_RADIAL')
+    );
+    if (visibleGradient && Array.isArray(visibleGradient.gradientStops) && visibleGradient.gradientStops.length >= 2) {
+      const firstStop = visibleGradient.gradientStops[0];
+      const lastStop = visibleGradient.gradientStops[visibleGradient.gradientStops.length - 1];
+      const fromHex = rgbaToHex(firstStop.color);
+      const toHex = rgbaToHex(lastStop.color);
+      classes.push('bg-gradient-to-r');
+      if (fromHex) classes.push(mapColorToTailwind(fromHex, 'from'));
+      if (toHex) classes.push(mapColorToTailwind(toHex, 'to'));
+    }
+
+    // Image fill on container with children
+    const visibleImage = node.fills.find(
+      (f: FigmaPaint) => f.visible !== false && f.type === 'IMAGE'
+    );
+    if (visibleImage && node.children && node.children.length > 0) {
+      classes.push('bg-cover', 'bg-center');
     }
   }
 
@@ -174,13 +251,19 @@ export function mapNodeToClasses(node: RawFigmaNode): string[] {
 
   // 5. Corner Radius
   if (node.cornerRadius && node.cornerRadius > 0) {
-    if (node.cornerRadius <= 4) classes.push('rounded');
-    else if (node.cornerRadius <= 8) classes.push('rounded-md');
-    else if (node.cornerRadius <= 12) classes.push('rounded-lg');
-    else if (node.cornerRadius <= 16) classes.push('rounded-xl');
-    else if (node.cornerRadius <= 24) classes.push('rounded-2xl');
-    else if (node.cornerRadius >= 999) classes.push('rounded-full');
-    else classes.push(`rounded-[${node.cornerRadius}px]`);
+    classes.push(mapRadiusClass(node.cornerRadius, 'rounded'));
+  } else if (!node.cornerRadius && Array.isArray(node.rectangleCornerRadii) && node.rectangleCornerRadii.length === 4) {
+    const [tl, tr, br, bl] = node.rectangleCornerRadii;
+    if (tl > 0 || tr > 0 || br > 0 || bl > 0) {
+      if (tl === tr && tr === br && br === bl) {
+        classes.push(mapRadiusClass(tl, 'rounded'));
+      } else {
+        if (tl > 0) classes.push(mapRadiusClass(tl, 'rounded-tl'));
+        if (tr > 0) classes.push(mapRadiusClass(tr, 'rounded-tr'));
+        if (br > 0) classes.push(mapRadiusClass(br, 'rounded-br'));
+        if (bl > 0) classes.push(mapRadiusClass(bl, 'rounded-bl'));
+      }
+    }
   }
 
   // 6. Effects (Shadow)
@@ -195,7 +278,44 @@ export function mapNodeToClasses(node: RawFigmaNode): string[] {
     }
   }
 
-  // 7. Typography (for Text)
+  // 7. Clipping (Overflow)
+  if (node.clipsContent === true) {
+    classes.push('overflow-hidden');
+  }
+
+  // 8. Opacity
+  if (node.opacity !== undefined && node.opacity < 1 && node.opacity >= 0) {
+    const standardOpacities: Record<number, string> = {
+      0: 'opacity-0',
+      0.05: 'opacity-5',
+      0.1: 'opacity-10',
+      0.15: 'opacity-15',
+      0.2: 'opacity-20',
+      0.25: 'opacity-25',
+      0.3: 'opacity-30',
+      0.35: 'opacity-35',
+      0.4: 'opacity-40',
+      0.45: 'opacity-45',
+      0.5: 'opacity-50',
+      0.55: 'opacity-55',
+      0.6: 'opacity-60',
+      0.65: 'opacity-65',
+      0.7: 'opacity-70',
+      0.75: 'opacity-75',
+      0.8: 'opacity-80',
+      0.85: 'opacity-85',
+      0.9: 'opacity-90',
+      0.95: 'opacity-95'
+    };
+    const roundedOpacity = Math.round(node.opacity * 100) / 100;
+    if (Math.abs(node.opacity - roundedOpacity) < 0.001 && standardOpacities[roundedOpacity]) {
+      classes.push(standardOpacities[roundedOpacity]);
+    } else {
+      classes.push(`opacity-[${Number(node.opacity.toFixed(2))}]`);
+    }
+  }
+
+  // 9. Typography (for Text)
   if (node.type === 'TEXT' && node.style) {
     classes.push(...mapTypography(node.style));
   }

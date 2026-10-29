@@ -1,9 +1,56 @@
 import yaml from 'js-yaml';
+import { encode } from 'gpt-tokenizer';
 import { CleanSpecNode, CompressionResult, RawFigmaNode } from './types.js';
 import { FigmaCompressor, CompressorOptions } from './compressor.js';
 
+function cleanNodeForYaml(node: CleanSpecNode, isRoot: boolean = false): Record<string, any> {
+  const clean: Record<string, any> = {};
+
+  const isRedundantTextName =
+    !isRoot &&
+    node.type === 'text' &&
+    !!node.name &&
+    !!node.text &&
+    node.name.trim() === node.text.trim();
+
+  if (node.name && !isRedundantTextName) {
+    clean.name = node.name;
+  }
+
+  if (node.type && node.type !== 'frame') {
+    clean.type = node.type;
+  }
+
+  if (node.classes) {
+    clean.classes = node.classes;
+  }
+
+  if (node.text !== undefined) {
+    clean.text = node.text;
+  }
+
+  if (node.icon !== undefined) {
+    clean.icon = node.icon;
+  }
+
+  if (node.image !== undefined) {
+    clean.image = node.image;
+  }
+
+  if (node.repeatCount !== undefined) {
+    clean.repeatCount = node.repeatCount;
+  }
+
+  if (node.children && Array.isArray(node.children) && node.children.length > 0) {
+    clean.children = node.children.map(child => cleanNodeForYaml(child, false));
+  }
+
+  return clean;
+}
+
 export function serializeToYaml(spec: CleanSpecNode): string {
-  return yaml.dump(spec, {
+  const yamlObj = cleanNodeForYaml(spec, true);
+  return yaml.dump(yamlObj, {
     indent: 2,
     noRefs: true,
     lineWidth: -1,
@@ -29,7 +76,7 @@ ${specYaml.trim()}
 `;
 }
 
-export function processAndBenchmark(rawFigma: RawFigmaNode, options?: CompressorOptions): CompressionResult {
+export function processAndBenchmark(rawFigma: RawFigmaNode | any, options?: CompressorOptions): CompressionResult {
   const compressor = new FigmaCompressor(options);
   const spec = compressor.compress(rawFigma);
 
@@ -38,16 +85,16 @@ export function processAndBenchmark(rawFigma: RawFigmaNode, options?: Compressor
   }
 
   const specYaml = serializeToYaml(spec);
-  const markdown = generateAgentPrompt(specYaml, rawFigma.name || 'Component');
+  const markdown = generateAgentPrompt(specYaml, spec.name || rawFigma.name || 'Component');
 
   const rawJsonStr = JSON.stringify(rawFigma);
   const rawJsonBytes = Buffer.byteLength(rawJsonStr, 'utf-8');
   const yamlBytes = Buffer.byteLength(specYaml, 'utf-8');
 
-  // Rough BPE token ratio: ~4 chars per token for English/code
-  const rawTokensEstimate = Math.round(rawJsonStr.length / 4);
-  const compressedTokensEstimate = Math.round(specYaml.length / 4);
-  const reductionPercentage = Math.round((1 - compressedTokensEstimate / rawTokensEstimate) * 100);
+  // Exact BPE token calculation via gpt-tokenizer
+  const rawTokens = encode(rawJsonStr).length;
+  const compressedTokens = encode(specYaml).length;
+  const reductionPercentage = rawTokens > 0 ? Math.round((1 - compressedTokens / rawTokens) * 100) : 0;
 
   return {
     spec,
@@ -58,8 +105,10 @@ export function processAndBenchmark(rawFigma: RawFigmaNode, options?: Compressor
       cleanNodesCount: compressor.cleanNodeCount,
       rawJsonBytes,
       yamlBytes,
-      rawTokensEstimate,
-      compressedTokensEstimate,
+      rawTokens,
+      compressedTokens,
+      rawTokensEstimate: rawTokens,
+      compressedTokensEstimate: compressedTokens,
       reductionPercentage
     }
   };
