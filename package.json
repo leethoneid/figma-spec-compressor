@@ -9,7 +9,8 @@
   "type": "module",
   "scripts": {
     "build": "tsc",
-    "test": "node --import tsx --test tests/compressor.test.ts tests/mcp-and-scale.test.ts",
+    "build:commercial": "node --import tsx scripts/build-commercial.ts",
+    "test": "node --import tsx --test tests/compressor.test.ts tests/mcp-and-scale.test.ts tests/commercial.test.ts",
     "benchmark": "node --import tsx tests/benchmark.ts",
     "start": "node --import tsx src/cli.ts",
     "mcp": "node --import tsx src/cli.ts mcp",
@@ -33,6 +34,8 @@
   "devDependencies": {
     "@types/js-yaml": "^4.0.9",
     "@types/node": "^20.14.0",
+    "esbuild": "^0.28.2",
+    "javascript-obfuscator": "^5.9.0",
     "tsx": "^4.19.0",
     "typescript": "^5.5.0"
   }
