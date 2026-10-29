@@ -1,0 +1,16 @@
+startCommand:
+  type: stdio
+  configSchema:
+    type: object
+    properties:
+      figmaAccessToken:
+        type: string
+        description: "Figma Personal Access Token (optional if FIGMA_ACCESS_TOKEN env var is set)"
+    required: []
+  commandFunction:
+    name: npx
+    args:
+      - "-y"
+      - "--package=figma-spec-compressor"
+      - "figma-spec"
+      - "mcp"
