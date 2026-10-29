@@ -1,0 +1,449 @@
+{
+  "id": "101:2034",
+  "name": "PricingCard / Pro Tier",
+  "type": "FRAME",
+  "scrollBehavior": "SCROLLS",
+  "blendMode": "PASS_THROUGH",
+  "visible": true,
+  "opacity": 1,
+  "isMask": false,
+  "layoutMode": "VERTICAL",
+  "primaryAxisSizingMode": "AUTO",
+  "counterAxisSizingMode": "AUTO",
+  "primaryAxisAlignItems": "MIN",
+  "counterAxisAlignItems": "CENTER",
+  "itemSpacing": 24,
+  "paddingLeft": 32,
+  "paddingRight": 32,
+  "paddingTop": 32,
+  "paddingBottom": 32,
+  "cornerRadius": 16,
+  "cornerSmoothing": 0.6,
+  "fills": [
+    {
+      "blendMode": "NORMAL",
+      "type": "SOLID",
+      "visible": true,
+      "opacity": 1,
+      "color": { "r": 1, "g": 1, "b": 1, "a": 1 }
+    }
+  ],
+  "strokes": [
+    {
+      "blendMode": "NORMAL",
+      "type": "SOLID",
+      "visible": true,
+      "opacity": 1,
+      "color": { "r": 0.886, "g": 0.91, "b": 0.941, "a": 1 }
+    }
+  ],
+  "strokeWeight": 1,
+  "strokeAlign": "INSIDE",
+  "strokeDashes": [],
+  "effects": [
+    {
+      "type": "DROP_SHADOW",
+      "visible": true,
+      "radius": 12,
+      "color": { "r": 0.059, "g": 0.09, "b": 0.165, "a": 0.08 },
+      "blendMode": "NORMAL",
+      "offset": { "x": 0, "y": 4 },
+      "spread": 0,
+      "showShadowBehindNode": false
+    }
+  ],
+  "constraints": { "horizontal": "LEFT", "vertical": "TOP" },
+  "relativeTransform": [[1, 0, 100], [0, 1, 150]],
+  "size": { "x": 380, "y": 620 },
+  "absoluteBoundingBox": { "x": 100, "y": 150, "width": 380, "height": 620 },
+  "children": [
+    {
+      "id": "101:2035",
+      "name": "Badge / Popular",
+      "type": "FRAME",
+      "blendMode": "PASS_THROUGH",
+      "layoutMode": "HORIZONTAL",
+      "primaryAxisAlignItems": "CENTER",
+      "counterAxisAlignItems": "CENTER",
+      "paddingLeft": 12,
+      "paddingRight": 12,
+      "paddingTop": 4,
+      "paddingBottom": 4,
+      "cornerRadius": 999,
+      "constraints": { "horizontal": "CENTER", "vertical": "TOP" },
+      "relativeTransform": [[1, 0, 134], [0, 1, 32]],
+      "size": { "x": 112, "y": 24 },
+      "fills": [
+        {
+          "blendMode": "NORMAL",
+          "type": "SOLID",
+          "visible": true,
+          "color": { "r": 0.145, "g": 0.388, "b": 0.922, "a": 1 }
+        }
+      ],
+      "strokes": [],
+      "children": [
+        {
+          "id": "101:2036",
+          "name": "MOST POPULAR",
+          "type": "TEXT",
+          "blendMode": "PASS_THROUGH",
+          "characters": "MOST POPULAR",
+          "style": {
+            "fontFamily": "Inter",
+            "fontPostScriptName": "Inter-Bold",
+            "fontSize": 12,
+            "fontWeight": 700,
+            "letterSpacing": 0.5,
+            "lineHeightPx": 16,
+            "textAlignHorizontal": "CENTER"
+          },
+          "constraints": { "horizontal": "CENTER", "vertical": "CENTER" },
+          "relativeTransform": [[1, 0, 12], [0, 1, 4]],
+          "size": { "x": 88, "y": 16 },
+          "fills": [
+            {
+              "blendMode": "NORMAL",
+              "type": "SOLID",
+              "visible": true,
+              "color": { "r": 1, "g": 1, "b": 1, "a": 1 }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "101:2037",
+      "name": "Header Info",
+      "type": "FRAME",
+      "blendMode": "PASS_THROUGH",
+      "layoutMode": "VERTICAL",
+      "itemSpacing": 8,
+      "counterAxisAlignItems": "CENTER",
+      "constraints": { "horizontal": "CENTER", "vertical": "TOP" },
+      "relativeTransform": [[1, 0, 32], [0, 1, 80]],
+      "size": { "x": 316, "y": 68 },
+      "children": [
+        {
+          "id": "101:2038",
+          "name": "Plan Name",
+          "type": "TEXT",
+          "blendMode": "PASS_THROUGH",
+          "characters": "Pro Plan",
+          "style": {
+            "fontFamily": "Inter",
+            "fontPostScriptName": "Inter-Bold",
+            "fontSize": 24,
+            "fontWeight": 700,
+            "lineHeightPx": 32
+          },
+          "constraints": { "horizontal": "CENTER", "vertical": "TOP" },
+          "relativeTransform": [[1, 0, 0], [0, 1, 0]],
+          "size": { "x": 105, "y": 32 },
+          "fills": [
+            {
+              "blendMode": "NORMAL",
+              "type": "SOLID",
+              "visible": true,
+              "color": { "r": 0.059, "g": 0.09, "b": 0.165, "a": 1 }
+            }
+          ]
+        },
+        {
+          "id": "101:2039",
+          "name": "Plan Subtitle",
+          "type": "TEXT",
+          "blendMode": "PASS_THROUGH",
+          "characters": "For growing SaaS and high-velocity engineering teams.",
+          "style": {
+            "fontFamily": "Inter",
+            "fontPostScriptName": "Inter-Regular",
+            "fontSize": 14,
+            "fontWeight": 400,
+            "lineHeightPx": 20,
+            "textAlignHorizontal": "CENTER"
+          },
+          "constraints": { "horizontal": "CENTER", "vertical": "TOP" },
+          "relativeTransform": [[1, 0, 0], [0, 1, 40]],
+          "size": { "x": 316, "y": 20 },
+          "fills": [
+            {
+              "blendMode": "NORMAL",
+              "type": "SOLID",
+              "visible": true,
+              "color": { "r": 0.392, "g": 0.455, "b": 0.545, "a": 1 }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "101:2040",
+      "name": "Price Container",
+      "type": "FRAME",
+      "blendMode": "PASS_THROUGH",
+      "layoutMode": "HORIZONTAL",
+      "primaryAxisAlignItems": "CENTER",
+      "counterAxisAlignItems": "CENTER",
+      "itemSpacing": 4,
+      "constraints": { "horizontal": "CENTER", "vertical": "TOP" },
+      "relativeTransform": [[1, 0, 32], [0, 1, 172]],
+      "size": { "x": 316, "y": 44 },
+      "children": [
+        {
+          "id": "101:2041",
+          "name": "Currency & Amount",
+          "type": "TEXT",
+          "blendMode": "PASS_THROUGH",
+          "characters": "$49",
+          "style": {
+            "fontFamily": "Inter",
+            "fontPostScriptName": "Inter-Bold",
+            "fontSize": 36,
+            "fontWeight": 700,
+            "lineHeightPx": 44
+          },
+          "constraints": { "horizontal": "LEFT", "vertical": "CENTER" },
+          "relativeTransform": [[1, 0, 0], [0, 1, 0]],
+          "size": { "x": 68, "y": 44 },
+          "fills": [
+            {
+              "blendMode": "NORMAL",
+              "type": "SOLID",
+              "visible": true,
+              "color": { "r": 0.059, "g": 0.09, "b": 0.165, "a": 1 }
+            }
+          ]
+        },
+        {
+          "id": "101:2042",
+          "name": "Billing Period",
+          "type": "TEXT",
+          "blendMode": "PASS_THROUGH",
+          "characters": "/month",
+          "style": {
+            "fontFamily": "Inter",
+            "fontPostScriptName": "Inter-Medium",
+            "fontSize": 14,
+            "fontWeight": 500,
+            "lineHeightPx": 20
+          },
+          "constraints": { "horizontal": "LEFT", "vertical": "CENTER" },
+          "relativeTransform": [[1, 0, 72], [0, 1, 12]],
+          "size": { "x": 48, "y": 20 },
+          "fills": [
+            {
+              "blendMode": "NORMAL",
+              "type": "SOLID",
+              "visible": true,
+              "color": { "r": 0.392, "g": 0.455, "b": 0.545, "a": 1 }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "101:2043",
+      "name": "Features List",
+      "type": "FRAME",
+      "blendMode": "PASS_THROUGH",
+      "layoutMode": "VERTICAL",
+      "itemSpacing": 12,
+      "constraints": { "horizontal": "LEFT", "vertical": "TOP" },
+      "relativeTransform": [[1, 0, 32], [0, 1, 240]],
+      "size": { "x": 316, "y": 140 },
+      "children": [
+        {
+          "id": "101:2044",
+          "name": "Feature Item 1",
+          "type": "FRAME",
+          "blendMode": "PASS_THROUGH",
+          "layoutMode": "HORIZONTAL",
+          "itemSpacing": 8,
+          "counterAxisAlignItems": "CENTER",
+          "constraints": { "horizontal": "LEFT", "vertical": "TOP" },
+          "relativeTransform": [[1, 0, 0], [0, 1, 0]],
+          "size": { "x": 316, "y": 20 },
+          "children": [
+            {
+              "id": "101:2045",
+              "name": "CheckIcon",
+              "type": "VECTOR",
+              "blendMode": "PASS_THROUGH",
+              "constraints": { "horizontal": "LEFT", "vertical": "CENTER" },
+              "relativeTransform": [[1, 0, 0], [0, 1, 2]],
+              "size": { "x": 16, "y": 16 },
+              "absoluteBoundingBox": { "x": 132, "y": 380, "width": 16, "height": 16 },
+              "vectorPaths": [
+                { "data": "M13.3333 4L6 11.3333L2.66667 8", "windingRule": "NONZERO" },
+                { "data": "M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0z", "windingRule": "EVENODD" }
+              ],
+              "fills": [],
+              "strokes": [{ "type": "SOLID", "color": { "r": 0.145, "g": 0.388, "b": 0.922, "a": 1 } }],
+              "strokeWeight": 2
+            },
+            {
+              "id": "101:2046",
+              "name": "Feature Text",
+              "type": "TEXT",
+              "blendMode": "PASS_THROUGH",
+              "characters": "Unlimited AI token compression",
+              "style": { "fontFamily": "Inter", "fontSize": 14, "fontWeight": 500, "lineHeightPx": 20 },
+              "constraints": { "horizontal": "LEFT", "vertical": "CENTER" },
+              "relativeTransform": [[1, 0, 24], [0, 1, 0]],
+              "size": { "x": 230, "y": 20 },
+              "fills": [{ "type": "SOLID", "color": { "r": 0.2, "g": 0.255, "b": 0.333, "a": 1 } }]
+            }
+          ]
+        },
+        {
+          "id": "101:2047",
+          "name": "Feature Item 2",
+          "type": "FRAME",
+          "blendMode": "PASS_THROUGH",
+          "layoutMode": "HORIZONTAL",
+          "itemSpacing": 8,
+          "counterAxisAlignItems": "CENTER",
+          "constraints": { "horizontal": "LEFT", "vertical": "TOP" },
+          "relativeTransform": [[1, 0, 0], [0, 1, 32]],
+          "size": { "x": 316, "y": 20 },
+          "children": [
+            {
+              "id": "101:2048",
+              "name": "CheckIcon",
+              "type": "VECTOR",
+              "blendMode": "PASS_THROUGH",
+              "constraints": { "horizontal": "LEFT", "vertical": "CENTER" },
+              "relativeTransform": [[1, 0, 0], [0, 1, 2]],
+              "size": { "x": 16, "y": 16 },
+              "absoluteBoundingBox": { "x": 132, "y": 408, "width": 16, "height": 16 },
+              "vectorPaths": [
+                { "data": "M13.3333 4L6 11.3333L2.66667 8", "windingRule": "NONZERO" }
+              ],
+              "fills": [],
+              "strokes": [{ "type": "SOLID", "color": { "r": 0.145, "g": 0.388, "b": 0.922, "a": 1 } }],
+              "strokeWeight": 2
+            },
+            {
+              "id": "101:2049",
+              "name": "Feature Text",
+              "type": "TEXT",
+              "blendMode": "PASS_THROUGH",
+              "characters": "Cursor & Claude Code native MCP sync",
+              "style": { "fontFamily": "Inter", "fontSize": 14, "fontWeight": 500, "lineHeightPx": 20 },
+              "constraints": { "horizontal": "LEFT", "vertical": "CENTER" },
+              "relativeTransform": [[1, 0, 24], [0, 1, 0]],
+              "size": { "x": 260, "y": 20 },
+              "fills": [{ "type": "SOLID", "color": { "r": 0.2, "g": 0.255, "b": 0.333, "a": 1 } }]
+            }
+          ]
+        },
+        {
+          "id": "101:2050",
+          "name": "Feature Item 3",
+          "type": "FRAME",
+          "blendMode": "PASS_THROUGH",
+          "layoutMode": "HORIZONTAL",
+          "itemSpacing": 8,
+          "counterAxisAlignItems": "CENTER",
+          "constraints": { "horizontal": "LEFT", "vertical": "TOP" },
+          "relativeTransform": [[1, 0, 0], [0, 1, 64]],
+          "size": { "x": 316, "y": 20 },
+          "children": [
+            {
+              "id": "101:2051",
+              "name": "CheckIcon",
+              "type": "VECTOR",
+              "blendMode": "PASS_THROUGH",
+              "constraints": { "horizontal": "LEFT", "vertical": "CENTER" },
+              "relativeTransform": [[1, 0, 0], [0, 1, 2]],
+              "size": { "x": 16, "y": 16 },
+              "absoluteBoundingBox": { "x": 132, "y": 436, "width": 16, "height": 16 },
+              "vectorPaths": [
+                { "data": "M13.3333 4L6 11.3333L2.66667 8", "windingRule": "NONZERO" }
+              ],
+              "fills": [],
+              "strokes": [{ "type": "SOLID", "color": { "r": 0.145, "g": 0.388, "b": 0.922, "a": 1 } }],
+              "strokeWeight": 2
+            },
+            {
+              "id": "101:2052",
+              "name": "Feature Text",
+              "type": "TEXT",
+              "blendMode": "PASS_THROUGH",
+              "characters": "Automatic Tailwind v3/v4 token extraction",
+              "style": { "fontFamily": "Inter", "fontSize": 14, "fontWeight": 500, "lineHeightPx": 20 },
+              "constraints": { "horizontal": "LEFT", "vertical": "CENTER" },
+              "relativeTransform": [[1, 0, 24], [0, 1, 0]],
+              "size": { "x": 280, "y": 20 },
+              "fills": [{ "type": "SOLID", "color": { "r": 0.2, "g": 0.255, "b": 0.333, "a": 1 } }]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "101:2053",
+      "name": "CTA Button",
+      "type": "FRAME",
+      "blendMode": "PASS_THROUGH",
+      "layoutMode": "HORIZONTAL",
+      "primaryAxisAlignItems": "CENTER",
+      "counterAxisAlignItems": "CENTER",
+      "paddingTop": 12,
+      "paddingBottom": 12,
+      "paddingLeft": 24,
+      "paddingRight": 24,
+      "cornerRadius": 8,
+      "constraints": { "horizontal": "CENTER", "vertical": "TOP" },
+      "relativeTransform": [[1, 0, 32], [0, 1, 410]],
+      "size": { "x": 316, "y": 48 },
+      "fills": [
+        {
+          "blendMode": "NORMAL",
+          "type": "SOLID",
+          "visible": true,
+          "color": { "r": 0.145, "g": 0.388, "b": 0.922, "a": 1 }
+        }
+      ],
+      "strokes": [],
+      "children": [
+        {
+          "id": "101:2054",
+          "name": "Button Label",
+          "type": "TEXT",
+          "blendMode": "PASS_THROUGH",
+          "characters": "Start 14-Day Free Trial",
+          "style": { "fontFamily": "Inter", "fontSize": 14, "fontWeight": 600, "lineHeightPx": 20 },
+          "constraints": { "horizontal": "CENTER", "vertical": "CENTER" },
+          "relativeTransform": [[1, 0, 80], [0, 1, 14]],
+          "size": { "x": 156, "y": 20 },
+          "fills": [{ "type": "SOLID", "color": { "r": 1, "g": 1, "b": 1, "a": 1 } }]
+        }
+      ]
+    },
+    {
+      "id": "999:9999",
+      "name": "Internal Design Annotations (Should be dropped)",
+      "type": "FRAME",
+      "blendMode": "PASS_THROUGH",
+      "visible": false,
+      "constraints": { "horizontal": "LEFT", "vertical": "TOP" },
+      "relativeTransform": [[1, 0, 400], [0, 1, 0]],
+      "size": { "x": 200, "y": 100 },
+      "children": [
+        {
+          "id": "999:9998",
+          "name": "Designer Note",
+          "type": "TEXT",
+          "blendMode": "PASS_THROUGH",
+          "characters": "TODO: Change CTA color on hover",
+          "style": { "fontFamily": "Inter", "fontSize": 12, "fontWeight": 400 },
+          "constraints": { "horizontal": "LEFT", "vertical": "TOP" },
+          "relativeTransform": [[1, 0, 0], [0, 1, 0]],
+          "size": { "x": 180, "y": 20 }
+        }
+      ]
+    }
+  ]
+}
