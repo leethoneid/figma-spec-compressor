@@ -10,6 +10,9 @@ export interface FigmaPaint {
   visible?: boolean;
   opacity?: number;
   color?: FigmaColor;
+  gradientStops?: Array<{ position: number; color: FigmaColor }>;
+  imageRef?: string;
+  scaleMode?: string;
 }
 
 export interface FigmaEffect {
@@ -35,7 +38,13 @@ export interface RawFigmaNode {
   type: string;
   visible?: boolean;
   opacity?: number;
+  clipsContent?: boolean;
   layoutMode?: 'NONE' | 'HORIZONTAL' | 'VERTICAL';
+  layoutWrap?: 'NO_WRAP' | 'WRAP';
+  layoutSizingHorizontal?: 'FIXED' | 'HUG' | 'FILL';
+  layoutSizingVertical?: 'FIXED' | 'HUG' | 'FILL';
+  layoutAlign?: string;
+  layoutGrow?: number;
   primaryAxisAlignItems?: string;
   counterAxisAlignItems?: string;
   itemSpacing?: number;
@@ -44,23 +53,27 @@ export interface RawFigmaNode {
   paddingTop?: number;
   paddingBottom?: number;
   cornerRadius?: number;
+  rectangleCornerRadii?: [number, number, number, number];
   characters?: string;
   style?: FigmaTypeStyle;
   fills?: FigmaPaint[];
   strokes?: FigmaPaint[];
   strokeWeight?: number;
   effects?: FigmaEffect[];
+  size?: { x: number; y: number };
   absoluteBoundingBox?: { x: number; y: number; width: number; height: number };
   children?: RawFigmaNode[];
   [key: string]: any;
 }
 
 export interface CleanSpecNode {
-  name: string;
+  name?: string;
   type?: 'frame' | 'text' | 'button' | 'icon' | 'image' | 'component';
   classes?: string;
   text?: string;
   icon?: string;
+  image?: string;
+  repeatCount?: number;
   children?: CleanSpecNode[];
 }
 
@@ -73,6 +86,8 @@ export interface CompressionResult {
     cleanNodesCount: number;
     rawJsonBytes: number;
     yamlBytes: number;
+    rawTokens?: number;
+    compressedTokens?: number;
     rawTokensEstimate: number;
     compressedTokensEstimate: number;
     reductionPercentage: number;

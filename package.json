@@ -1,7 +1,7 @@
 {
   "name": "figma-spec-compressor",
-  "version": "1.0.0",
-  "description": "Token-optimized AST pruning and spec extractor for Figma-to-Agent workflows (Cursor / Claude Code)",
+  "version": "1.1.0",
+  "description": "Token-optimized AST pruning, MCP server, and spec extractor for Figma-to-Agent workflows (Cursor / Claude Code)",
   "main": "dist/index.js",
   "bin": {
     "figma-spec": "dist/cli.js"
@@ -12,6 +12,7 @@
     "test": "node --import tsx --test tests/**/*.test.ts",
     "benchmark": "node --import tsx tests/benchmark.ts",
     "start": "node --import tsx src/cli.ts",
+    "mcp": "node --import tsx src/cli.ts mcp",
     "serve": "node --import tsx src/server.ts"
   },
   "keywords": [
@@ -26,12 +27,12 @@
   "license": "MIT",
   "dependencies": {
     "commander": "^12.1.0",
+    "gpt-tokenizer": "^2.8.1",
     "js-yaml": "^4.1.0"
   },
   "devDependencies": {
     "@types/js-yaml": "^4.0.9",
     "@types/node": "^20.14.0",
-    "gpt-tokenizer": "^2.8.1",
     "tsx": "^4.19.0",
     "typescript": "^5.5.0"
   }
