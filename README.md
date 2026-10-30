@@ -1,10 +1,38 @@
 # Figma Spec Compressor (Universal Agent-Ready AST Pruner & MCP Server)
 
-> Token-optimized AST pruning, live Figma API fetching, and genuine Model Context Protocol (MCP) server for **Google Antigravity, Cursor, Claude Code, Windsurf, Zed / ZCode, Codex, and Trae**.
+> Token-optimized AST pruning, live Figma API fetching, and genuine Model Context Protocol (MCP) server for **Google Antigravity, Cursor Composer, Claude Code, Windsurf, Zed / ZCode, OpenAI Codex, and Trae**.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Node: >=20](https://img.shields.io/badge/Node->=20-brightgreen.svg)]()
 [![MCP: 2024-11-05](https://img.shields.io/badge/MCP-2024--11--05-blueviolet.svg)]()
+[![Build Status: Passing](https://img.shields.io/badge/Tests-26%2F26%20Passing-emerald.svg)]()
+
+---
+
+## Architecture Overview
+
+```mermaid
+flowchart TD
+    A["Raw Figma Design URL / JSON AST<br/>(50,000 ~ 200,000+ Raw Tokens)"] --> B["Figma Spec Compressor AST Pruner"]
+    
+    subgraph "Compression & Translation Pipeline"
+        B --> C1["Drop Invisible Nodes & Deep Redlines"]
+        B --> C2["Auto-Layout to Idiomatic Tailwind v3/v4"]
+        B --> C3["Vector Clumps to Semantic <icon> Tags"]
+        B --> C4["Color Hex / Opacity / Radius Normalization"]
+    end
+
+    C1 & C2 & C3 & C4 --> D["Clean Structured YAML / Markdown Spec<br/>(80%–95% Token Reduction, < 55ms)"]
+
+    subgraph "Universal AI Editor Consumption"
+        D --> E1["Google Antigravity (MCP)"]
+        D --> E2["Cursor Composer (.cursor/mcp.json)"]
+        D --> E3["Claude Code & Desktop (claude mcp add)"]
+        D --> E4["Zed / ZCode (context_servers)"]
+        D --> E5["Trae by ByteDance (Native MCP)"]
+        D --> E6["OpenAI Codex / Copilot CLI (Stdio Pipe)"]
+    end
+```
 
 ---
 
@@ -212,6 +240,25 @@ npx tsc --noEmit
 
 ---
 
+## Editions & Features
+
+| Capability | Community (Open Source) | Pro Lifetime ($29) | Agency & Team ($79) |
+| :--- | :---: | :---: | :---: |
+| **Figma AST Node Pruning** | ✅ Yes | ✅ Yes | ✅ Yes |
+| **Auto-Layout to Tailwind v3/v4** | ✅ Basic | ✅ Full Idiomatic | ✅ Full Idiomatic |
+| **Vector Icon Collapsing** | ✅ Yes | ✅ Advanced | ✅ Advanced |
+| **Model Context Protocol (MCP)** | ✅ Stdio | ✅ Stdio & HTTP | ✅ Stdio & HTTP |
+| **All AI Editors (Antigravity/Cursor/Zed/Trae/Codex)** | ✅ Yes | ✅ Yes | ✅ Yes |
+| **Live Figma URL Direct Stream** | Manual | ✅ 1-Click Live Fetch | ✅ 1-Click Live Fetch |
+| **Offline Activation & Hardware Lock** | — | ✅ 2 Devices | ✅ 5+ Team Seats |
+| **Commercial Client Project Rights** | — | ✅ Full Rights | ✅ Full Agency Rights |
+| **Self-Hosted HTTP Gateway Guide** | — | — | ✅ Included |
+
+---
+
 ## License
+
+- Open-source core engine is licensed under the MIT License.
+- Pro Commercial distribution is licensed under the [Commercial EULA](COMMERCIAL-EULA.md).
 
 MIT © Solo Overseas
