@@ -12,10 +12,12 @@ export function createAppServer(options: ServerOptions = {}): http.Server {
   const maxBodyBytes = options.maxBodyBytes ?? 20 * 1024 * 1024; // Default 20 MB
 
   const server = http.createServer((req, res) => {
-    // CORS headers
+    // CORS and Security headers
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Figma-Token');
+    res.setHeader('X-Content-Type-Options', 'nosniff');
+    res.setHeader('X-Frame-Options', 'DENY');
 
     if (req.method === 'OPTIONS') {
       res.writeHead(204);
