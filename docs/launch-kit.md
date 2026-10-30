@@ -19,7 +19,7 @@
    - **Price**: `$29.00` (One-time payment / 单次买断)
    - **Product Type**: `Digital Download / License Key`
    - **Description**: 
-     > Token-optimized Model Context Protocol (MCP) server for Cursor & Claude Code. Prunes raw Figma API payloads by 80%–95% in 50ms. Lifetime access to MCP server binaries, updates, and Tailwind prompt kits.
+     > Universal token-optimized Model Context Protocol (MCP) server & CLI for Google Antigravity, Cursor, Claude Code, Windsurf, Zed, Codex, and Trae. Prunes raw Figma API payloads by 80%–95% in 50ms. Lifetime access to MCP server binaries, cross-editor configs, updates, and Tailwind prompt kits.
 2. 在 **Fulfillment（履约交付）** 设置：
    - **File Upload**: 上传编译好的加固发布压缩包 `figma-spec-pro-v1.1.0.zip`（由 `npm run package:commercial` 一键生成）；
    - **License Keys**: 开启 **"Generate License Keys"**（单码限 2 台设备绑定）。
@@ -48,9 +48,9 @@
 > 4. Verified on cl100k_base BPE: 189,485 raw tokens -> 9,800 clean spec tokens.
 
 ### Tweet 3 (CTA & Links)
-> It runs as a native stdio MCP server for Cursor Composer, Claude Code, and Windsurf.
+> It runs as a native stdio MCP server & CLI for Google Antigravity, Cursor Composer, Claude Code, Zed / ZCode, Windsurf, Trae, and Codex.
 > 
-> 30-second setup in `.cursor/mcp.json`.
+> 30-second setup in standard MCP config.
 > 
 > 🔗 Live Interactive Demo & Pro Pass ($29): [your-landing-page-url]
 > 📦 Smithery / MCP Directory: [smithery-url]

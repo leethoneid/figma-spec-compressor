@@ -1,6 +1,6 @@
-# Figma Spec Compressor (Agent-Ready AST Pruner & MCP Server)
+# Figma Spec Compressor (Universal Agent-Ready AST Pruner & MCP Server)
 
-> Token-optimized AST pruning, live Figma API fetching, and genuine Model Context Protocol (MCP) server for Cursor and Claude Code.
+> Token-optimized AST pruning, live Figma API fetching, and genuine Model Context Protocol (MCP) server for **Google Antigravity, Cursor, Claude Code, Windsurf, Zed / ZCode, Codex, and Trae**.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Node: >=20](https://img.shields.io/badge/Node->=20-brightgreen.svg)]()
@@ -32,11 +32,41 @@ Tested on minified wire JSON using exact BPE tokenization (`gpt-tokenizer` / cl1
 
 ---
 
-## Agent Integrations (Cursor & Claude Code)
+## Universal AI Editor & Agent Integrations
 
-### 1. Cursor Integration (`.cursor/mcp.json`)
+The compressor runs as a standard **Model Context Protocol (MCP)** stdio server or standalone CLI, making it universally plug-and-play across all leading global and domestic AI editors:
 
-To enable Figma extraction tools directly in Cursor Composer or Chat, add the MCP server configuration to `.cursor/mcp.json`:
+| AI Editor / Environment | Supported Mode | Configuration Location / Method |
+| :--- | :---: | :--- |
+| **Google Antigravity** | MCP / Tool | Workspace MCP Settings (`agy mcp add`) |
+| **Cursor** | Native MCP | `.cursor/mcp.json` |
+| **Claude Code & Desktop** | Native MCP | `claude mcp add` / `~/.claude/mcp.json` |
+| **Windsurf (Codeium)** | Native MCP | `~/.codeium/windsurf/mcp_config.json` |
+| **Zed / ZCode** | Context Server | `settings.json` -> `context_servers` |
+| **Trae (ByteDance)** | Native MCP | IDE Settings -> MCP Servers |
+| **OpenAI Codex / Copilot / CLI** | CLI Pipe | Direct stdout piping into prompts |
+
+---
+
+### 1. Google Antigravity Configuration
+Add to your project's Antigravity MCP configuration:
+```json
+{
+  "mcpServers": {
+    "figma-spec": {
+      "command": "npx",
+      "args": ["-y", "--package=figma-spec-compressor", "figma-spec", "mcp"],
+      "env": {
+        "FIGMA_ACCESS_TOKEN": "figd_your_personal_access_token_here"
+      }
+    }
+  }
+}
+```
+
+### 2. Cursor Integration (`.cursor/mcp.json`)
+
+To enable Figma extraction tools directly in Cursor Composer or Chat, add to `.cursor/mcp.json`:
 
 ```json
 {
@@ -52,27 +82,7 @@ To enable Figma extraction tools directly in Cursor Composer or Chat, add the MC
 }
 ```
 
-#### Local Clone / Development Mode
-If running from a local checkout or monorepo:
-```json
-{
-  "mcpServers": {
-    "figma-spec": {
-      "command": "node",
-      "args": ["/absolute/path/to/figma-spec-compressor/dist/cli.js", "mcp"],
-      "env": {
-        "FIGMA_ACCESS_TOKEN": "figd_your_personal_access_token_here"
-      }
-    }
-  }
-}
-```
-
-Once added, Cursor can automatically invoke:
-- `compress_figma_url`: Fetches a live Figma URL (`https://www.figma.com/design/:fileKey/:slug?node-id=...`) and returns token-optimized YAML/Markdown specs.
-- `compress_figma_json`: Compresses raw Figma JSON AST directly from files or clipboards.
-
-### 2. Claude Code Integration
+### 3. Claude Code & Claude Desktop Integration
 
 Add `figma-spec` directly via the Claude Code CLI:
 
@@ -80,7 +90,7 @@ Add `figma-spec` directly via the Claude Code CLI:
 claude mcp add figma-spec npx -y --package=figma-spec-compressor figma-spec mcp -e FIGMA_ACCESS_TOKEN=figd_your_personal_access_token_here
 ```
 
-Or configure in your global MCP settings file (`~/.claude/mcp.json`):
+Or configure in your global MCP settings file (`~/.claude/mcp.json` or `claude_desktop_config.json`):
 
 ```json
 {
@@ -94,6 +104,45 @@ Or configure in your global MCP settings file (`~/.claude/mcp.json`):
     }
   }
 }
+```
+
+### 4. Zed / ZCode Integration (`settings.json`)
+
+In Zed / ZCode editor preferences:
+
+```json
+{
+  "context_servers": {
+    "figma-spec": {
+      "command": {
+        "path": "npx",
+        "args": ["-y", "--package=figma-spec-compressor", "figma-spec", "mcp"],
+        "env": {
+          "FIGMA_ACCESS_TOKEN": "figd_your_personal_access_token_here"
+        }
+      }
+    }
+  }
+}
+```
+
+### 5. Trae (字节跳动 AI IDE) & 国内主流 AI 编程环境
+
+Trae 原生支持 MCP 协议。在 Trae 偏好设置中的 **MCP Servers** 中添加：
+- **Name**: `figma-spec`
+- **Command**: `npx`
+- **Args**: `-y --package=figma-spec-compressor figma-spec mcp`
+- **Env**: `FIGMA_ACCESS_TOKEN=figd_xxx`
+
+对于通义灵码、豆包 MarsCode 等暂未开放 MCP 协议的编辑器，可直接通过 CLI 管道模式生成标准规范后供 AI 直接消费。
+
+### 6. OpenAI Codex / Terminal AI CLI 管道模式
+
+对于没有原生 GUI MCP 面板的环境，可使用标准 CLI 导出，直接无缝复制或管道重定向给 Codex/LLM：
+
+```bash
+# 提取并将极致压缩的 Tailwind 规范输出为 Markdown 提示词
+npx --package=figma-spec-compressor figma-spec url "https://www.figma.com/design/:fileKey/:slug?node-id=:id" --markdown -o prompt.md
 ```
 
 ---
