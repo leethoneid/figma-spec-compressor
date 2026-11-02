@@ -28,7 +28,7 @@ export interface CachedLicenseData {
   signature: string;
 }
 
-const DEFAULT_SECRET = 'figma-spec-commercial-signer-default-key-v1';
+const DEFAULT_SECRET = process.env.COMMERCIAL_SIGNER_SECRET || 'figma-spec-dev-signer-key-local';
 
 export function getCacheFilePath(): string {
   const dir = path.join(os.homedir(), '.figma-spec');
