@@ -1,7 +1,7 @@
 import {
   checkCachedLicense,
   saveCachedLicense,
-  verifyLemonSqueezyLicense,
+  verifyGumroadLicense,
   verifyOfflineLicenseToken,
   LicenseVerificationResult
 } from './license.js';
@@ -13,7 +13,7 @@ export class CommercialLicenseError extends Error {
     super(
       `[COMMERCIAL LICENSE ERROR] ${message}\n` +
       `Please provide a valid license key via --license <key> or set FIGMA_SPEC_LICENSE_KEY environment variable.\n` +
-      `To purchase a Pro Lifetime License ($29), visit: https://creem.io`
+      `To purchase a Pro Lifetime License ($29), visit: https://yeelix.gumroad.com/l/figma-spec-pro`
     );
     this.name = 'CommercialLicenseError';
   }
@@ -50,13 +50,13 @@ export async function assertCommercialLicense(
     return cachedRes;
   }
 
-  // 3. If standard Lemon Squeezy license key is provided, perform online activation
+  // 3. If standard Gumroad license key is provided, perform online activation
   if (key) {
     if (options.skipNetwork) {
       throw new CommercialLicenseError('Network activation disabled and no valid local license cache found.');
     }
 
-    const onlineRes = await verifyLemonSqueezyLicense(key, { fetchImpl: options.fetchImpl });
+    const onlineRes = await verifyGumroadLicense(key, { fetchImpl: options.fetchImpl });
     if (onlineRes.valid) {
       // Save to cache upon successful verification
       try {

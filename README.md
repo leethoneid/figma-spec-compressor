@@ -58,6 +58,8 @@ Tested on minified wire JSON using exact BPE tokenization (`gpt-tokenizer` / cl1
 | **Tier 1** | SaaS Pricing Card (`saas-pricing-card.json`) | 23 | 21 | 3,010 | 615 | **80%** | 21.02 ms |
 | **Tier 2** | Enterprise SaaS Analytics Dashboard (50k+ stress test) | 646 | 327 | 189,485 | 9,800 | **95%** | 165.19 ms (~165 ms) |
 
+> **Benchmark Methodology Note**: Tier 1 is measured on an actual SaaS pricing component fixture (`fixtures/saas-pricing-card.json`). Tier 2 is measured on a procedurally generated 646-node synthetic enterprise analytics dashboard fixture designed to rigorously benchmark AST pruning and vector collapsing under extreme noise.
+
 ---
 
 ## Universal AI Editor & Agent Integrations
@@ -83,7 +85,7 @@ Add to your project's Antigravity MCP configuration:
   "mcpServers": {
     "figma-spec": {
       "command": "npx",
-      "args": ["-y", "--package=figma-spec-compressor", "figma-spec", "mcp"],
+      "args": ["-y", "github:leethoneid/figma-spec-compressor", "mcp"],
       "env": {
         "FIGMA_ACCESS_TOKEN": "figd_your_personal_access_token_here"
       }
@@ -101,7 +103,7 @@ To enable Figma extraction tools directly in Cursor Composer or Chat, add to `.c
   "mcpServers": {
     "figma-spec": {
       "command": "npx",
-      "args": ["-y", "--package=figma-spec-compressor", "figma-spec", "mcp"],
+      "args": ["-y", "github:leethoneid/figma-spec-compressor", "mcp"],
       "env": {
         "FIGMA_ACCESS_TOKEN": "figd_your_personal_access_token_here"
       }
@@ -115,7 +117,7 @@ To enable Figma extraction tools directly in Cursor Composer or Chat, add to `.c
 Add `figma-spec` directly via the Claude Code CLI:
 
 ```bash
-claude mcp add figma-spec npx -y --package=figma-spec-compressor figma-spec mcp -e FIGMA_ACCESS_TOKEN=figd_your_personal_access_token_here
+claude mcp add figma-spec npx -y github:leethoneid/figma-spec-compressor mcp -e FIGMA_ACCESS_TOKEN=figd_your_personal_access_token_here
 ```
 
 Or configure in your global MCP settings file (`~/.claude/mcp.json` or `claude_desktop_config.json`):
@@ -125,7 +127,7 @@ Or configure in your global MCP settings file (`~/.claude/mcp.json` or `claude_d
   "mcpServers": {
     "figma-spec": {
       "command": "npx",
-      "args": ["-y", "--package=figma-spec-compressor", "figma-spec", "mcp"],
+      "args": ["-y", "github:leethoneid/figma-spec-compressor", "mcp"],
       "env": {
         "FIGMA_ACCESS_TOKEN": "figd_your_personal_access_token_here"
       }
@@ -159,7 +161,7 @@ In Zed / ZCode editor preferences:
 Trae 原生支持 MCP 协议。在 Trae 偏好设置中的 **MCP Servers** 中添加：
 - **Name**: `figma-spec`
 - **Command**: `npx`
-- **Args**: `-y --package=figma-spec-compressor figma-spec mcp`
+- **Args**: `-y github:leethoneid/figma-spec-compressor mcp`
 - **Env**: `FIGMA_ACCESS_TOKEN=figd_xxx`
 
 对于通义灵码、豆包 MarsCode 等暂未开放 MCP 协议的编辑器，可直接通过 CLI 管道模式生成标准规范后供 AI 直接消费。
@@ -170,7 +172,7 @@ Trae 原生支持 MCP 协议。在 Trae 偏好设置中的 **MCP Servers** 中�
 
 ```bash
 # 提取并将极致压缩的 Tailwind 规范输出为 Markdown 提示词
-npx --package=figma-spec-compressor figma-spec url "https://www.figma.com/design/:fileKey/:slug?node-id=:id" --markdown -o prompt.md
+npx -y github:leethoneid/figma-spec-compressor url "https://www.figma.com/design/:fileKey/:slug?node-id=:id" --markdown -o prompt.md
 ```
 
 ---
@@ -180,28 +182,28 @@ npx --package=figma-spec-compressor figma-spec url "https://www.figma.com/design
 ### 1. Fetch & Compress Live Figma URLs
 ```bash
 # Fetch and print compressed YAML spec with token reduction metrics
-npx --package=figma-spec-compressor figma-spec url "https://www.figma.com/design/Vxyz123Abc/Dashboard?node-id=101-2034" --stats
+npx -y github:leethoneid/figma-spec-compressor url "https://www.figma.com/design/Vxyz123Abc/Dashboard?node-id=101-2034" --stats
 
 # Pass access token explicitly
-npx --package=figma-spec-compressor figma-spec url "https://www.figma.com/file/Vxyz123Abc" --token "figd_xxx" -o ./spec.yaml
+npx -y github:leethoneid/figma-spec-compressor url "https://www.figma.com/file/Vxyz123Abc" --token "figd_xxx" -o ./spec.yaml
 
 # Generate full prompt markdown for agent consumption
-npx --package=figma-spec-compressor figma-spec url "https://www.figma.com/design/Vxyz123Abc" -o ./prompt.md --markdown
+npx -y github:leethoneid/figma-spec-compressor url "https://www.figma.com/design/Vxyz123Abc" -o ./prompt.md --markdown
 ```
 
 ### 2. Compress Local Figma JSON AST
 ```bash
 # Compress local file and view reduction metrics
-npx --package=figma-spec-compressor figma-spec compress ./fixtures/saas-pricing-card.json --stats
+npx -y github:leethoneid/figma-spec-compressor compress ./fixtures/saas-pricing-card.json --stats
 
 # Output directly to a file
-npx --package=figma-spec-compressor figma-spec compress ./fixtures/saas-pricing-card.json -o ./spec.yaml
+npx -y github:leethoneid/figma-spec-compressor compress ./fixtures/saas-pricing-card.json -o ./spec.yaml
 ```
 
 ### 3. Run MCP Stdio Server
 ```bash
 # Start standard input/output JSON-RPC MCP server
-npx --package=figma-spec-compressor figma-spec mcp
+npx -y github:leethoneid/figma-spec-compressor mcp
 ```
 
 ---

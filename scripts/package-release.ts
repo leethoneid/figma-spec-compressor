@@ -46,7 +46,7 @@ print(f"Package created: {out_zip} ({os.path.getsize(out_zip)} bytes)")
   }
 
   console.log('\n[SUCCESS] Fulfillment package ready: figma-spec-pro-v1.1.0.zip');
-  console.log('You can now upload this ZIP file directly to Creem.io as the digital download file.');
+  console.log('You can now upload this ZIP file directly to Gumroad as the digital download file.');
 }
 
 main().catch(err => {

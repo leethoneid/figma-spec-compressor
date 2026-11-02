@@ -86,7 +86,7 @@ Whenever I tried feeding Figma components into Cursor Composer via API or raw JS
 I ended up building an MCP server called **Figma Spec Compressor** to solve my own problem:
 - It strips out vector coordinate bloat and maps layout/padding/colors directly into Tailwind CSS classes.
 - It runs over standard stdio JSON-RPC, so you just add it to `.cursor/mcp.json` once.
-- Once added, you can literally paste: `"Build this: https://figma.com/design/...?"` into Cursor, and it fetches the live node, compresses it from ~180k down to ~9k tokens in 50ms, and Cursor writes the React code immediately without context lag.
+- Once added, you can literally paste: `"Build this: https://figma.com/design/...?"` into Cursor, and it fetches the live node, compresses it from ~180k down to ~9k tokens in ~165ms, and Cursor writes the React code immediately without context lag.
 
 I verified the numbers using OpenAI's cl100k_base BPE tokenizer:
 - SaaS Pricing Card: 3,010 -> 615 tokens (80% reduction)

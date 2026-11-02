@@ -6,16 +6,18 @@ import { processAndBenchmark } from './serializer.js';
 
 export interface ServerOptions {
   maxBodyBytes?: number;
+  apiKey?: string;
 }
 
 export function createAppServer(options: ServerOptions = {}): http.Server {
   const maxBodyBytes = options.maxBodyBytes ?? 20 * 1024 * 1024; // Default 20 MB
+  const apiKey = options.apiKey ?? process.env.API_KEY;
 
   const server = http.createServer((req, res) => {
     // CORS headers
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Figma-Token');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-API-Key, X-Figma-Token');
 
     if (req.method === 'OPTIONS') {
       res.writeHead(204);
@@ -30,6 +32,18 @@ export function createAppServer(options: ServerOptions = {}): http.Server {
     }
 
     if (req.method === 'POST' && req.url === '/api/compress') {
+      // API Key Authentication Guard (if configured)
+      if (apiKey) {
+        const authHeader = req.headers['authorization'];
+        const customKey = req.headers['x-api-key'];
+        const token = authHeader?.startsWith('Bearer ') ? authHeader.slice(7) : (customKey as string);
+        if (!token || token !== apiKey) {
+          res.writeHead(401, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify({ error: 'Unauthorized: Invalid or missing API key' }));
+          return;
+        }
+      }
+
       let totalBytes = 0;
       const chunks: Buffer[] = [];
       let isExceeded = false;
@@ -81,8 +95,9 @@ const isDirectRun = Boolean(
 
 if (isDirectRun) {
   const PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : 3001;
+  const HOST = process.env.HOST || '127.0.0.1'; // Safe default: bind to localhost
   const server = createAppServer();
-  server.listen(PORT, '0.0.0.0', () => {
-    console.log(`[Figma-Spec-Compressor] HTTP Server listening on port ${PORT}`);
+  server.listen(PORT, HOST, () => {
+    console.log(`[Figma-Spec-Compressor] HTTP Server listening on http://${HOST}:${PORT}`);
   });
 }

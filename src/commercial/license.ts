@@ -28,7 +28,16 @@ export interface CachedLicenseData {
   signature: string;
 }
 
-const DEFAULT_SECRET = process.env.COMMERCIAL_SIGNER_SECRET || 'figma-spec-dev-signer-key-local';
+export const DEFAULT_GUMROAD_PRODUCT_ID = 'VALWkRvdZllugPWQadSyLw==';
+export const DEFAULT_GUMROAD_PERMALINK = 'figma-spec-pro';
+
+/**
+ * Derives a deterministic machine-bound HMAC key for securing local activation caches.
+ * Prevents transferring cache files across machines or manual JSON tampering.
+ */
+export function getLocalCacheHmacKey(): string {
+  return crypto.createHash('sha256').update(`fsp-cache-hw-salt:${getMachineFingerprint()}`).digest('hex');
+}
 
 export function getCacheFilePath(): string {
   const dir = path.join(os.homedir(), '.figma-spec');
@@ -40,14 +49,20 @@ export function getCacheFilePath(): string {
 
 /**
  * Generates an offline cryptographically signed commercial license token.
+ * Requires an explicit secretKey or COMMERCIAL_SIGNER_SECRET environment variable.
  */
 export function generateOfflineLicenseToken(
   payload: LicensePayload,
-  secretKey: string = DEFAULT_SECRET
+  secretKey?: string
 ): string {
+  const secret = secretKey || process.env.COMMERCIAL_SIGNER_SECRET;
+  if (!secret) {
+    throw new Error('COMMERCIAL_SIGNER_SECRET environment variable or explicit secretKey is required to sign offline license tokens.');
+  }
+
   const jsonStr = JSON.stringify(payload);
   const encoded = Buffer.from(jsonStr, 'utf-8').toString('base64');
-  const hmac = crypto.createHmac('sha256', secretKey).update(encoded).digest('hex');
+  const hmac = crypto.createHmac('sha256', secret).update(encoded).digest('hex');
   return `FSPLIC.${encoded}.${hmac}`;
 }
 
@@ -68,7 +83,10 @@ export function verifyOfflineLicenseToken(
   }
 
   const [prefix, encodedPayload, expectedHmac] = parts;
-  const secretKey = options?.secretKey || DEFAULT_SECRET;
+  const secretKey = options?.secretKey || process.env.COMMERCIAL_SIGNER_SECRET;
+  if (!secretKey) {
+    return { valid: false, reason: 'Offline verification unavailable: no signing key configured.' };
+  }
 
   try {
     const computedHmac = crypto.createHmac('sha256', secretKey).update(encodedPayload).digest('hex');
@@ -108,54 +126,66 @@ export function verifyOfflineLicenseToken(
 }
 
 /**
- * Validates a Merchant of Record (Creem / Lemon Squeezy) standard license key via activation API.
+ * Validates a Gumroad commercial license key via Gumroad verification API.
  */
-export async function verifyMoRLicense(
+export async function verifyGumroadLicense(
   licenseKey: string,
   options?: {
-    instanceName?: string;
+    productId?: string;
+    productPermalink?: string;
     fetchImpl?: typeof fetch;
     apiUrl?: string;
+    incrementUses?: boolean;
   }
 ): Promise<LicenseVerificationResult> {
-  const instanceName = options?.instanceName || os.hostname();
   const fetcher = options?.fetchImpl || fetch;
-  const url = options?.apiUrl || process.env.CREEM_API_URL || process.env.MOR_API_URL || 'https://api.creem.io/v1/licenses/activate';
+  const url = options?.apiUrl || 'https://api.gumroad.com/v2/licenses/verify';
+  const productId = options?.productId || process.env.GUMROAD_PRODUCT_ID || DEFAULT_GUMROAD_PRODUCT_ID;
 
   try {
+    const params = new URLSearchParams({
+      product_id: productId,
+      license_key: licenseKey.trim(),
+      increment_uses_count: options?.incrementUses !== false ? 'true' : 'false'
+    });
+
     const res = await fetcher(url, {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/x-www-form-urlencoded'
       },
-      body: new URLSearchParams({
-        license_key: licenseKey,
-        instance_name: instanceName
-      })
+      body: params.toString()
     });
 
     const data: any = await res.json();
-    if (data?.activated === true || data?.valid === true) {
+    if (data?.success === true && data?.purchase) {
+      if (data.purchase.refunded || data.purchase.chargebacked) {
+        return {
+          valid: false,
+          reason: 'License key has been refunded or chargebacked.'
+        };
+      }
       return {
         valid: true,
-        buyerId: data?.meta?.customer_email || data?.customer_email || data?.license_key?.user_name || 'verified-customer'
+        buyerId: data.purchase.email || 'gumroad-customer'
       };
     }
 
     return {
       valid: false,
-      reason: data?.error || 'Invalid or exhausted license key.'
+      reason: data?.message || 'Invalid or revoked Gumroad license key.'
     };
   } catch (err: any) {
     return {
       valid: false,
-      reason: `MoR license activation failure: ${err?.message || err}`
+      reason: `Gumroad license verification network failure: ${err?.message || err}`
     };
   }
 }
 
-export const verifyLemonSqueezyLicense = verifyMoRLicense;
+export const verifyMoRLicense = verifyGumroadLicense;
+export const verifyLemonSqueezyLicense = verifyGumroadLicense;
 
 /**
  * Checks local activation cache. If valid and verified within 14 days on the same machine, grants access.
@@ -177,9 +207,9 @@ export function checkCachedLicense(
       return { valid: false, reason: 'Cache invalidated: hardware signature mismatch.' };
     }
 
-    // Verify cache integrity HMAC
+    // Verify cache integrity HMAC using local machine-derived key
     const expectedSig = crypto
-      .createHmac('sha256', DEFAULT_SECRET)
+      .createHmac('sha256', getLocalCacheHmacKey())
       .update(`${cached.licenseKey}|${cached.buyerId}|${cached.machineId}|${cached.verifiedAt}`)
       .digest('hex');
 
@@ -216,7 +246,7 @@ export function saveCachedLicense(
   const verifiedAt = new Date().toISOString();
 
   const signature = crypto
-    .createHmac('sha256', DEFAULT_SECRET)
+    .createHmac('sha256', getLocalCacheHmacKey())
     .update(`${licenseKey}|${buyerId}|${machineId}|${verifiedAt}`)
     .digest('hex');
 

@@ -21,6 +21,8 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const tempDir = path.join(os.tmpdir(), `figma-spec-test-${Date.now()}`);
 
+process.env.COMMERCIAL_SIGNER_SECRET = process.env.COMMERCIAL_SIGNER_SECRET || 'test-suite-commercial-signer-secret';
+
 describe('Commercial Hardening & Anti-Piracy Suite', () => {
 
   test('getMachineFingerprint should return consistent 32-char hex hardware hash', () => {

@@ -36,7 +36,7 @@
 ### Reddit Post A (Target: `r/Cursor` & `r/ClaudeAI`)
 
 **Title**:  
-`I got tired of Figma blowing up Cursor's 200k context window, so I built an open-source MCP token compressor (cuts 80%–95% wire noise in 50ms)`
+`I got tired of Figma blowing up Cursor's 200k context window, so I built an open-source MCP token compressor (cuts 80%–95% wire noise in <25ms)`
 
 **Post Body**:
 ```markdown
@@ -293,7 +293,7 @@ How are you preventing Figma REST API responses from eating up your 200k context
 
 On complex components, raw Figma JSON easily balloons to 100k–200k tokens because of vector points and bounding boxes.
 
-I ended up writing an open-source AST pruner that drops 95% of the noise in 50ms before feeding it to the AI:
+I ended up writing an open-source AST pruner that drops 95% of the noise in 21ms–165ms before feeding it to the AI:
 https://github.com/leethoneid/figma-spec-compressor
 
 Curious what other solutions or plugins people are using to keep token costs and latency down?

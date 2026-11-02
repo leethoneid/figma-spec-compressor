@@ -1,0 +1,97 @@
+#!/usr/bin/env node
+import { Command } from 'commander';
+import fs from 'node:fs';
+import path from 'node:path';
+import { extractFigmaNode, fetchFigmaNodeFromUrl } from './figma-client.js';
+import { startMcpStdioServer } from './mcp.js';
+import { processAndBenchmark } from './serializer.js';
+const program = new Command();
+program
+    .name('figma-spec')
+    .description('Token-optimized AST pruning, MCP server, and spec extractor for Figma-to-Agent workflows')
+    .version('1.1.0');
+function printMetrics(metrics) {
+    const rawTokens = metrics.rawTokens ?? metrics.rawTokensEstimate;
+    const compressedTokens = metrics.compressedTokens ?? metrics.compressedTokensEstimate;
+    console.log('\n--- Compression Metrics ---');
+    console.log(`Raw Nodes:          ${metrics.rawNodesCount}`);
+    console.log(`Clean Nodes:        ${metrics.cleanNodesCount}`);
+    console.log(`Raw JSON Size:      ${(metrics.rawJsonBytes / 1024).toFixed(2)} KB`);
+    console.log(`Compressed Size:    ${(metrics.yamlBytes / 1024).toFixed(2)} KB`);
+    console.log(`Est. Raw Tokens:    ${rawTokens.toLocaleString()}`);
+    console.log(`Est. Spec Tokens:   ${compressedTokens.toLocaleString()}`);
+    console.log(`Token Reduction:    ${metrics.reductionPercentage}%`);
+}
+program
+    .command('compress')
+    .description('Compress raw Figma JSON AST into compact agent-ready YAML spec')
+    .argument('<file>', 'Path to raw Figma JSON file')
+    .option('-o, --output <path>', 'Output file path (YAML or Markdown)')
+    .option('-m, --markdown', 'Output full prompt markdown instead of raw YAML', false)
+    .option('-s, --stats', 'Print token and compression statistics to stdout', false)
+    .action((filePath, options) => {
+    try {
+        const fullPath = path.resolve(process.cwd(), filePath);
+        if (!fs.existsSync(fullPath)) {
+            console.error(`Error: File not found at ${fullPath}`);
+            process.exit(1);
+        }
+        const content = fs.readFileSync(fullPath, 'utf-8');
+        const rawJson = JSON.parse(content);
+        const node = extractFigmaNode(rawJson);
+        const result = processAndBenchmark(node);
+        const outputData = options.markdown ? result.markdown : result.yaml;
+        if (options.output) {
+            const outPath = path.resolve(process.cwd(), options.output);
+            fs.writeFileSync(outPath, outputData, 'utf-8');
+            console.log(`Successfully written spec to ${outPath}`);
+        }
+        else if (!options.stats) {
+            console.log(outputData);
+        }
+        if (options.stats || options.output) {
+            printMetrics(result.metrics);
+        }
+    }
+    catch (err) {
+        console.error(`Compression error: ${err.message}`);
+        process.exit(1);
+    }
+});
+program
+    .command('url')
+    .description('Fetch and compress a Figma file or node directly from its URL')
+    .argument('<figmaUrl>', 'Figma URL (e.g. https://www.figma.com/design/:fileKey/slug?node-id=...)')
+    .option('-t, --token <token>', 'Figma Personal Access Token (defaults to FIGMA_ACCESS_TOKEN env var)')
+    .option('-o, --output <path>', 'Output file path (YAML or Markdown)')
+    .option('-m, --markdown', 'Output full prompt markdown instead of raw YAML', false)
+    .option('-s, --stats', 'Print token and compression statistics to stdout', false)
+    .action(async (figmaUrl, options) => {
+    try {
+        const node = await fetchFigmaNodeFromUrl(figmaUrl, { token: options.token });
+        const result = processAndBenchmark(node);
+        const outputData = options.markdown ? result.markdown : result.yaml;
+        if (options.output) {
+            const outPath = path.resolve(process.cwd(), options.output);
+            fs.writeFileSync(outPath, outputData, 'utf-8');
+            console.log(`Successfully written spec to ${outPath}`);
+        }
+        else if (!options.stats) {
+            console.log(outputData);
+        }
+        if (options.stats || options.output) {
+            printMetrics(result.metrics);
+        }
+    }
+    catch (err) {
+        console.error(`Figma URL error: ${err.message}`);
+        process.exit(1);
+    }
+});
+program
+    .command('mcp')
+    .description('Start Model Context Protocol (MCP) Stdio server for Cursor and Claude Code')
+    .action(() => {
+    startMcpStdioServer();
+});
+program.parse(process.argv);
