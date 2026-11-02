@@ -242,7 +242,7 @@ npx tsc --noEmit
 
 ## Editions & Features
 
-| Capability | Community (Open Source) | Pro Lifetime ($29) | Agency & Team ($79) |
+| Capability | Community (Open Source) | [Pro Lifetime ($29)](https://yeelix.gumroad.com/l/figma-spec-pro) | [Agency & Team ($79)](https://yeelix.gumroad.com/l/figma-spec-pro) |
 | :--- | :---: | :---: | :---: |
 | **Figma AST Node Pruning** | ✅ Yes | ✅ Yes | ✅ Yes |
 | **Auto-Layout to Tailwind v3/v4** | ✅ Basic | ✅ Full Idiomatic | ✅ Full Idiomatic |
@@ -253,6 +253,8 @@ npx tsc --noEmit
 | **Offline Activation & Hardware Lock** | — | ✅ 2 Devices | ✅ 5+ Team Seats |
 | **Commercial Client Project Rights** | — | ✅ Full Rights | ✅ Full Agency Rights |
 | **Self-Hosted HTTP Gateway Guide** | — | — | ✅ Included |
+
+👉 **[Get Pro Lifetime License on Gumroad ($29)](https://yeelix.gumroad.com/l/figma-spec-pro)**
 
 ---
 
