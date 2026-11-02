@@ -42,8 +42,7 @@ async function buildCommercialRelease() {
       'url'
     ],
     define: {
-      'process.env.COMMERCIAL_BUILD': '"true"',
-      'process.env.COMMERCIAL_SIGNER_SECRET': JSON.stringify(process.env.COMMERCIAL_SIGNER_SECRET || 'fsp-embedded-drm-v1.1-key')
+      'process.env.COMMERCIAL_BUILD': '"true"'
     }
   });
 

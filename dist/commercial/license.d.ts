@@ -22,21 +22,28 @@ export interface CachedLicenseData {
 export declare const DEFAULT_GUMROAD_PRODUCT_ID = "VALWkRvdZllugPWQadSyLw==";
 export declare const DEFAULT_GUMROAD_PERMALINK = "figma-spec-pro";
 /**
+ * Public asymmetric Ed25519 key used strictly for offline license verification.
+ * Safe to distribute in open-source and commercial binaries.
+ * Mathematical property: Signature cannot be forged without the private key.
+ */
+export declare const COMMERCIAL_PUBLIC_KEY: string;
+/**
  * Derives a deterministic machine-bound HMAC key for securing local activation caches.
  * Prevents transferring cache files across machines or manual JSON tampering.
  */
 export declare function getLocalCacheHmacKey(): string;
 export declare function getCacheFilePath(): string;
 /**
- * Generates an offline cryptographically signed commercial license token.
- * Requires an explicit secretKey or COMMERCIAL_SIGNER_SECRET environment variable.
+ * Generates an offline cryptographically signed commercial license token using Ed25519 asymmetric cryptography.
+ * Requires privateKeyPem or COMMERCIAL_SIGNER_PRIVATE_KEY environment variable.
+ * Private keys are NEVER stored in the repository or distribution binaries.
  */
-export declare function generateOfflineLicenseToken(payload: LicensePayload, secretKey?: string): string;
+export declare function generateOfflineLicenseToken(payload: LicensePayload, privateKeyPem?: string): string;
 /**
- * Verifies an offline cryptographic license token against the current machine fingerprint.
+ * Verifies an offline cryptographic license token against the public Ed25519 key and machine fingerprint.
  */
 export declare function verifyOfflineLicenseToken(token: string, options?: {
-    secretKey?: string;
+    publicKey?: string;
     expectedMachineId?: string;
 }): LicenseVerificationResult;
 /**

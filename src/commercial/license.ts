@@ -32,6 +32,16 @@ export const DEFAULT_GUMROAD_PRODUCT_ID = 'VALWkRvdZllugPWQadSyLw==';
 export const DEFAULT_GUMROAD_PERMALINK = 'figma-spec-pro';
 
 /**
+ * Public asymmetric Ed25519 key used strictly for offline license verification.
+ * Safe to distribute in open-source and commercial binaries.
+ * Mathematical property: Signature cannot be forged without the private key.
+ */
+export const COMMERCIAL_PUBLIC_KEY =
+  '-----BEGIN PUBLIC KEY-----\n' +
+  'MCowBQYDK2VwAyEABUvDSE8ZuZFW0CWdA3uIKMzXDEM0WCMDgu0+hoI2rMY=\n' +
+  '-----END PUBLIC KEY-----\n';
+
+/**
  * Derives a deterministic machine-bound HMAC key for securing local activation caches.
  * Prevents transferring cache files across machines or manual JSON tampering.
  */
@@ -48,30 +58,42 @@ export function getCacheFilePath(): string {
 }
 
 /**
- * Generates an offline cryptographically signed commercial license token.
- * Requires an explicit secretKey or COMMERCIAL_SIGNER_SECRET environment variable.
+ * Generates an offline cryptographically signed commercial license token using Ed25519 asymmetric cryptography.
+ * Requires privateKeyPem or COMMERCIAL_SIGNER_PRIVATE_KEY environment variable.
+ * Private keys are NEVER stored in the repository or distribution binaries.
  */
 export function generateOfflineLicenseToken(
   payload: LicensePayload,
-  secretKey?: string
+  privateKeyPem?: string
 ): string {
-  const secret = secretKey || process.env.COMMERCIAL_SIGNER_SECRET;
-  if (!secret) {
-    throw new Error('COMMERCIAL_SIGNER_SECRET environment variable or explicit secretKey is required to sign offline license tokens.');
+  let privateKey = privateKeyPem || process.env.COMMERCIAL_SIGNER_PRIVATE_KEY;
+  if (!privateKey) {
+    // Attempt reading from local gitignored developer secret file
+    const secretPath = path.resolve(process.cwd(), '.secrets', 'commercial-signer.private.pem');
+    if (fs.existsSync(secretPath)) {
+      privateKey = fs.readFileSync(secretPath, 'utf-8');
+    }
+  }
+
+  if (!privateKey) {
+    throw new Error(
+      'COMMERCIAL_SIGNER_PRIVATE_KEY environment variable or .secrets/commercial-signer.private.pem is required to sign offline license tokens. Never commit private keys to git.'
+    );
   }
 
   const jsonStr = JSON.stringify(payload);
   const encoded = Buffer.from(jsonStr, 'utf-8').toString('base64');
-  const hmac = crypto.createHmac('sha256', secret).update(encoded).digest('hex');
-  return `FSPLIC.${encoded}.${hmac}`;
+  const payloadBuf = Buffer.from(encoded, 'utf-8');
+  const signatureHex = crypto.sign(null, payloadBuf, privateKey).toString('hex');
+  return `FSPLIC.${encoded}.${signatureHex}`;
 }
 
 /**
- * Verifies an offline cryptographic license token against the current machine fingerprint.
+ * Verifies an offline cryptographic license token against the public Ed25519 key and machine fingerprint.
  */
 export function verifyOfflineLicenseToken(
   token: string,
-  options?: { secretKey?: string; expectedMachineId?: string }
+  options?: { publicKey?: string; expectedMachineId?: string }
 ): LicenseVerificationResult {
   if (!token || !token.startsWith('FSPLIC.')) {
     return { valid: false, reason: 'Invalid license format. Expected FSPLIC.* token.' };
@@ -82,19 +104,16 @@ export function verifyOfflineLicenseToken(
     return { valid: false, reason: 'Malformed license token segments.' };
   }
 
-  const [prefix, encodedPayload, expectedHmac] = parts;
-  const secretKey = options?.secretKey || process.env.COMMERCIAL_SIGNER_SECRET;
-  if (!secretKey) {
-    return { valid: false, reason: 'Offline verification unavailable: no signing key configured.' };
-  }
+  const [prefix, encodedPayload, signatureHex] = parts;
+  const publicKey = options?.publicKey || COMMERCIAL_PUBLIC_KEY;
 
   try {
-    const computedHmac = crypto.createHmac('sha256', secretKey).update(encodedPayload).digest('hex');
-    const expectedBuf = Buffer.from(expectedHmac, 'hex');
-    const computedBuf = Buffer.from(computedHmac, 'hex');
+    const payloadBuf = Buffer.from(encodedPayload, 'utf-8');
+    const sigBuf = Buffer.from(signatureHex, 'hex');
 
-    if (expectedBuf.length !== computedBuf.length || !crypto.timingSafeEqual(expectedBuf, computedBuf)) {
-      return { valid: false, reason: 'License signature verification failed. Token was tampered with.' };
+    const isValid = crypto.verify(null, payloadBuf, publicKey, sigBuf);
+    if (!isValid) {
+      return { valid: false, reason: 'License signature verification failed. Token was tampered with or forged.' };
     }
 
     const payload: LicensePayload = JSON.parse(Buffer.from(encodedPayload, 'base64').toString('utf-8'));

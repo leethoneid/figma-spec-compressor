@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
 import os from 'node:os';
+import crypto from 'node:crypto';
 import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import {
@@ -20,8 +21,6 @@ import {
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const tempDir = path.join(os.tmpdir(), `figma-spec-test-${Date.now()}`);
-
-process.env.COMMERCIAL_SIGNER_SECRET = process.env.COMMERCIAL_SIGNER_SECRET || 'test-suite-commercial-signer-secret';
 
 describe('Commercial Hardening & Anti-Piracy Suite', () => {
 
@@ -53,7 +52,10 @@ describe('Commercial Hardening & Anti-Piracy Suite', () => {
   });
 
   test('verifyOfflineLicenseToken should authenticate valid token, block expired, and lock to machine ID', () => {
-    const secret = 'test-offline-signing-secret';
+    const { publicKey: testPubKey, privateKey: testPrivKey } = crypto.generateKeyPairSync('ed25519', {
+      publicKeyEncoding: { type: 'spki', format: 'pem' },
+      privateKeyEncoding: { type: 'pkcs8', format: 'pem' }
+    });
     const currentMachine = getMachineFingerprint();
 
     // 1. Valid non-expired license locked to current machine
@@ -65,10 +67,10 @@ describe('Commercial Hardening & Anti-Piracy Suite', () => {
         expiresAt: 'never',
         issuedAt: new Date().toISOString()
       },
-      secret
+      testPrivKey
     );
 
-    const validRes = verifyOfflineLicenseToken(validToken, { secretKey: secret });
+    const validRes = verifyOfflineLicenseToken(validToken, { publicKey: testPubKey });
     assert.equal(validRes.valid, true);
     assert.equal(validRes.buyerId, 'customer@acme.com');
 
@@ -81,10 +83,10 @@ describe('Commercial Hardening & Anti-Piracy Suite', () => {
         expiresAt: 'never',
         issuedAt: new Date().toISOString()
       },
-      secret
+      testPrivKey
     );
 
-    const foreignRes = verifyOfflineLicenseToken(foreignToken, { secretKey: secret });
+    const foreignRes = verifyOfflineLicenseToken(foreignToken, { publicKey: testPubKey });
     assert.equal(foreignRes.valid, false);
     assert.ok(foreignRes.reason?.includes('locked to a different device'));
 
@@ -96,17 +98,17 @@ describe('Commercial Hardening & Anti-Piracy Suite', () => {
         expiresAt: '2020-01-01T00:00:00.000Z',
         issuedAt: '2019-01-01T00:00:00.000Z'
       },
-      secret
+      testPrivKey
     );
 
-    const expiredRes = verifyOfflineLicenseToken(expiredToken, { secretKey: secret });
+    const expiredRes = verifyOfflineLicenseToken(expiredToken, { publicKey: testPubKey });
     assert.equal(expiredRes.valid, false);
     assert.ok(expiredRes.reason?.includes('License expired'));
 
     // 4. Tampered token signature
     const parts = validToken.split('.');
     const tamperedToken = `${parts[0]}.${parts[1]}.badhmac1234567890`;
-    const tamperedRes = verifyOfflineLicenseToken(tamperedToken, { secretKey: secret });
+    const tamperedRes = verifyOfflineLicenseToken(tamperedToken, { publicKey: testPubKey });
     assert.equal(tamperedRes.valid, false);
     assert.ok(tamperedRes.reason?.includes('tampered with'));
   });
