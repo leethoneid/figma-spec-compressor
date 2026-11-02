@@ -20,7 +20,7 @@
 > 
 > Cursor chokes, your context window explodes, and your wallet bleeds $0.35 per prompt.
 > 
-> So I built Figma Spec Compressor: a lightweight MCP server that cuts raw payloads by 80%–95% in 50ms with zero layout hallucinations.
+> So I built Figma Spec Compressor: a lightweight MCP server that cuts raw payloads by 80%–95% in 20ms–165ms with zero layout hallucinations.
 > 
 > Watch it in action 👇 (Attach 30s screen recording)
 
@@ -62,7 +62,7 @@ A single modern SaaS dashboard easily yields 150,000 to 200,000+ tokens of raw J
 To fix this, I built **Figma Spec Compressor** (https://your-landing-url):
 - It implements the Model Context Protocol (MCP) as a lightweight stdio server.
 - It parses the Figma AST, prunes invisible nodes, maps Auto Layout properties into Tailwind classes, and collapses nested SVG vector clumps into semantic icon references.
-- Benchmark: On a 646-node SaaS analytics dashboard, minified wire tokens dropped from 189,485 down to 9,800 exact BPE tokens (94.8% reduction), running in ~54ms on Node.
+- Benchmark: On a 646-node SaaS analytics dashboard, minified wire tokens dropped from 189,485 down to 9,800 exact BPE tokens (94.8% reduction), running in ~165ms on Node (and <25ms on typical components).
 
 You can configure it in `.cursor/mcp.json` with 4 lines of JSON and pass live Figma URLs directly in chat.
 

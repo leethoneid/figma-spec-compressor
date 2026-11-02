@@ -7,7 +7,7 @@
 
 ### Core Value Proposition
 - **The Pain**: When connecting AI editors (Google Antigravity, Cursor, Claude Code, Windsurf, Zed, Trae) to Figma, raw Figma REST API responses blow up to **50,000–200,000+ tokens** for modern SaaS dashboards. This causes severe context exhaustion, hallucinated broken CSS, and high API costs ($0.35+ per prompt).
-- **The Solution**: **Figma Spec Compressor** is an AST pruner and Model Context Protocol (MCP) server that cuts wire noise by **80%–95% in under 55ms**, translates Auto-Layout into idiomatic Tailwind CSS classes, and collapses vector clumps into semantic `<icon>` tags.
+- **The Solution**: **Figma Spec Compressor** is an AST pruner and Model Context Protocol (MCP) server that cuts wire noise by **80%–95% in 20ms–165ms** (~21ms for typical UI components, ~165ms for 646-node enterprise dashboards), translates Auto-Layout into idiomatic Tailwind CSS classes, and collapses vector clumps into semantic `<icon>` tags.
 - **Universal Compatibility**: Google Antigravity, Cursor Composer, Claude Code, Zed / ZCode, Trae (ByteDance), OpenAI Codex, and any stdio MCP environment.
 
 ### Official Asset Directory
@@ -56,9 +56,9 @@ To solve this, I built **Figma Spec Compressor** — a lightweight AST pruner an
 - **Auto-Layout Translation**: Maps Figma Flexbox, padding, and fills directly into clean Tailwind CSS classes.
 - **Vector Clump Collapsing**: Collapses 100+ SVG path points into single semantic `<icon>` tags.
 - **Benchmark verified on cl100k_base BPE**:
-  - SaaS Pricing Card: 3,010 -> 615 tokens (**80% reduction**)
-  - Enterprise Analytics Dashboard: 189,485 -> 9,800 tokens (**94.8% reduction**)
-  - Execution speed: runs in **~54ms** on Node.js.
+  - SaaS Pricing Card: 3,010 -> 615 tokens (**80% reduction**, 21.02 ms)
+  - Enterprise Analytics Dashboard: 189,485 -> 9,800 tokens (**94.8% reduction**, 165.19 ms)
+  - Execution speed: sub-second local execution (20ms ~ 165ms) on Node.js.
 
 ### How to use it in Cursor:
 It runs as a standard stdio MCP server. You just add it to `.cursor/mcp.json`:
@@ -110,7 +110,7 @@ I spent the last few weeks engineering an AST pruning pipeline to bridge Figma a
 2. **Auto-Layout normalization**: Translates flex wrap, padding arrays, gap dimensions, and border radiuses into idiomatic Tailwind v3/v4 utility classes.
 3. **Semantic icon replacement**: Converts vector clusters into concise `<icon name="..." />` references.
 
-The result: The same 189k token dashboard shrinks to 9,800 tokens (94.8% drop) and processes locally in 54ms.
+The result: The same 189k token dashboard shrinks to 9,800 tokens (94.8% drop) and processes locally in ~165ms.
 
 The core tool and benchmark scripts are open-sourced:
 👉 GitHub: https://github.com/leethoneid/figma-spec-compressor
@@ -190,7 +190,7 @@ Raw Figma JSON (189k tokens)
 [3] Vector Collapser (Replaces 100+ SVG points with <icon> tags)
    │
    ▼
-Clean YAML / Markdown Spec (9.8k tokens, < 55ms)
+Clean YAML / Markdown Spec (9.8k tokens, ~165ms)
 ```
 
 ### Verified Benchmark Results
@@ -199,8 +199,8 @@ Tested with OpenAI's `gpt-tokenizer` (`cl100k_base`):
 
 | Component Frame | Raw AST Nodes | Clean Nodes | Raw Tokens | Compressed Tokens | Reduction | Speed |
 | :--- | :---: | :---: | :---: | :---: | :---: | :---: |
-| **SaaS Pricing Card** | 23 | 21 | 3,010 | 615 | **80%** | 25ms |
-| **Enterprise Dashboard** | 646 | 327 | 189,485 | 9,800 | **94.8%** | 54ms |
+| **SaaS Pricing Card** | 23 | 21 | 3,010 | 615 | **80%** | 21.02 ms |
+| **Enterprise Dashboard** | 646 | 327 | 189,485 | 9,800 | **94.8%** | 165.19 ms |
 
 ---
 
@@ -264,7 +264,7 @@ Built a tool to fix a problem every frontend developer using AI editors is facin
 If you've tried connecting Cursor, Claude Code, or Google Antigravity to Figma's API, you know what happens:
 A single SaaS dashboard dumps 150,000+ tokens of vector coordinates and bounding boxes into your LLM. Context window explodes, and your AI starts hallucinating broken CSS.
 
-I built Figma Spec Compressor: a lightweight AST pruner & MCP server that cuts raw Figma payloads by 80%–95% in under 55ms.
+I built Figma Spec Compressor: a lightweight AST pruner & MCP server that cuts raw Figma payloads by 80%–95% in 20ms ~ 165ms.
 
 Key Features:
 ⚡ Prunes 189k tokens down to 9.8k tokens

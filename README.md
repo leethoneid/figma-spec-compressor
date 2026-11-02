@@ -22,7 +22,7 @@ flowchart TD
         B --> C4["Color Hex / Opacity / Radius Normalization"]
     end
 
-    C1 & C2 & C3 & C4 --> D["Clean Structured YAML / Markdown Spec<br/>(80%–95% Token Reduction, < 55ms)"]
+    C1 & C2 & C3 & C4 --> D["Clean Structured YAML / Markdown Spec<br/>(80%–95% Token Reduction, 21ms ~ 165ms)"]
 
     subgraph "Universal AI Editor Consumption"
         D --> E1["Google Antigravity (MCP)"]
@@ -55,8 +55,8 @@ Tested on minified wire JSON using exact BPE tokenization (`gpt-tokenizer` / cl1
 
 | Tier | Component Description | Raw AST Nodes | Clean Spec Nodes | Raw Wire BPE Tokens | Compressed Spec Tokens | BPE Token Reduction | Compression Latency |
 | :--- | :--- | :---: | :---: | :---: | :---: | :---: | :---: |
-| **Tier 1** | SaaS Pricing Card (`saas-pricing-card.json`) | 23 | 21 | 3,010 | 615 | **80%** | ~25 ms |
-| **Tier 2** | Enterprise SaaS Analytics Dashboard (50k+ stress test) | 646 | 327 | 189,485 | 9,800 | **95%** | ~180 ms |
+| **Tier 1** | SaaS Pricing Card (`saas-pricing-card.json`) | 23 | 21 | 3,010 | 615 | **80%** | 21.02 ms |
+| **Tier 2** | Enterprise SaaS Analytics Dashboard (50k+ stress test) | 646 | 327 | 189,485 | 9,800 | **95%** | 165.19 ms (~165 ms) |
 
 ---
 
