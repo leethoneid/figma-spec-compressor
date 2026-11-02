@@ -22,8 +22,8 @@ async function main() {
     process.exit(1);
   }
 
-  console.log('[2/2] Creating digital fulfillment ZIP package (for Creem upload)...');
-  // Use Python's standard zipfile for zero-dependency universal ZIP packaging
+  console.log('[2/2] Creating digital fulfillment ZIP package (for Gumroad upload)...');
+  // Multi-runtime ZIP compression: python3 -> python -> zip (Unix) -> Compress-Archive (PowerShell)
   const pyCode = `
 import zipfile, os
 rel_dir = r"${releaseDir}"
@@ -39,9 +39,51 @@ with zipfile.ZipFile(out_zip, 'w', zipfile.ZIP_DEFLATED) as z:
 print(f"Package created: {out_zip} ({os.path.getsize(out_zip)} bytes)")
 `;
 
-  const zipRes = spawnSync('python', ['-c', pyCode], { stdio: 'inherit' });
-  if (zipRes.status !== 0) {
-    console.error('Packaging failed.');
+  let packaged = false;
+
+  // 1. Try python3, then python
+  for (const pyBin of ['python3', 'python']) {
+    try {
+      const check = spawnSync(pyBin, ['--version']);
+      if (check.status === 0) {
+        const res = spawnSync(pyBin, ['-c', pyCode], { stdio: 'inherit' });
+        if (res.status === 0 && fs.existsSync(zipOutPath)) {
+          packaged = true;
+          break;
+        }
+      }
+    } catch {
+      // Continue to next fallback
+    }
+  }
+
+  // 2. Try native zip (Linux / macOS)
+  if (!packaged) {
+    try {
+      if (fs.existsSync(zipOutPath)) fs.unlinkSync(zipOutPath);
+      const res = spawnSync('zip', ['-r', zipOutPath, '.'], { cwd: releaseDir, stdio: 'inherit' });
+      if (res.status === 0 && fs.existsSync(zipOutPath)) {
+        packaged = true;
+        console.log(`Package created via zip CLI: ${zipOutPath} (${fs.statSync(zipOutPath).size} bytes)`);
+      }
+    } catch {}
+  }
+
+  // 3. Try PowerShell Compress-Archive (Windows fallback)
+  if (!packaged) {
+    try {
+      if (fs.existsSync(zipOutPath)) fs.unlinkSync(zipOutPath);
+      const psScript = `Compress-Archive -Path '${releaseDir}\\*' -DestinationPath '${zipOutPath}' -Force`;
+      const res = spawnSync('powershell', ['-NoProfile', '-Command', psScript], { stdio: 'inherit' });
+      if (res.status === 0 && fs.existsSync(zipOutPath)) {
+        packaged = true;
+        console.log(`Package created via PowerShell Compress-Archive: ${zipOutPath} (${fs.statSync(zipOutPath).size} bytes)`);
+      }
+    } catch {}
+  }
+
+  if (!packaged) {
+    console.error('Packaging failed: Neither python3, python, zip, nor powershell Compress-Archive succeeded.');
     process.exit(1);
   }
 
