@@ -18,7 +18,7 @@ flowchart TD
     subgraph "Compression & Translation Pipeline"
         B --> C1["Drop Invisible Nodes & Deep Redlines"]
         B --> C2["Auto-Layout to Idiomatic Tailwind v3/v4"]
-        B --> C3["Vector Clumps to Semantic <icon> Tags"]
+        B --> C3["Vector Clumps to Semantic <icon> Tags<br/>(Source Node ID & Component ID Preserved)"]
         B --> C4["Color Hex / Opacity / Radius Normalization"]
     end
 
@@ -55,8 +55,8 @@ Tested on minified wire JSON using exact BPE tokenization (`gpt-tokenizer` / cl1
 
 | Tier | Component Description | Raw AST Nodes | Clean Spec Nodes | Raw Wire BPE Tokens | Compressed Spec Tokens | BPE Token Reduction | Compression Latency |
 | :--- | :--- | :---: | :---: | :---: | :---: | :---: | :---: |
-| **Tier 1** | SaaS Pricing Card (`saas-pricing-card.json`) | 23 | 21 | 3,010 | 615 | **80%** | 21.02 ms |
-| **Tier 2** | Enterprise SaaS Analytics Dashboard (50k+ stress test) | 646 | 327 | 189,485 | 9,800 | **95%** | 165.19 ms (~165 ms) |
+| **Tier 1** | SaaS Pricing Card (`saas-pricing-card.json`) | 23 | 21 | 3,010 | 642 | **79%** | 21.02 ms |
+| **Tier 2** | Enterprise SaaS Analytics Dashboard (50k+ stress test) | 646 | 327 | 189,485 | 10,384 | **95%** | 165.19 ms (~165 ms) |
 
 > **Benchmark Methodology Note**: Tier 1 is measured on an actual SaaS pricing component fixture (`fixtures/saas-pricing-card.json`). Tier 2 is measured on a procedurally generated 646-node synthetic enterprise analytics dashboard fixture designed to rigorously benchmark AST pruning and vector collapsing under extreme noise.
 

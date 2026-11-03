@@ -21,6 +21,14 @@ function cleanNodeForYaml(node: CleanSpecNode, isRoot: boolean = false): Record<
     clean.type = node.type;
   }
 
+  if (node.id) {
+    clean.id = node.id;
+  }
+
+  if (node.componentId) {
+    clean.componentId = node.componentId;
+  }
+
   if (node.classes) {
     clean.classes = node.classes;
   }

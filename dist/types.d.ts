@@ -76,6 +76,8 @@ export interface RawFigmaNode {
     [key: string]: any;
 }
 export interface CleanSpecNode {
+    id?: string;
+    componentId?: string;
     name?: string;
     type?: 'frame' | 'text' | 'button' | 'icon' | 'image' | 'component';
     classes?: string;

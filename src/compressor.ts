@@ -91,11 +91,18 @@ export class FigmaCompressor {
     if (this.options.convertVectorsToIcons && (node.type === 'VECTOR' || node.type === 'BOOLEAN_OPERATION')) {
       const w = node.absoluteBoundingBox?.width ? Math.round(node.absoluteBoundingBox.width) : 16;
       const h = node.absoluteBoundingBox?.height ? Math.round(node.absoluteBoundingBox.height) : 16;
-      return {
+      const iconNode: CleanSpecNode = {
         name: node.name || 'Icon',
         type: 'icon',
         icon: `${node.name || 'Icon'} (${w}x${h})`
       };
+      if (node.id) {
+        iconNode.id = node.id;
+      }
+      if (node.componentId && node.componentId !== node.id) {
+        iconNode.componentId = node.componentId;
+      }
+      return iconNode;
     }
 
     // Image Node Detection
@@ -135,11 +142,18 @@ export class FigmaCompressor {
       if (allVectors && (node.name.toLowerCase().includes('icon') || node.name.toLowerCase().includes('svg') || node.name.toLowerCase().includes('glyph'))) {
         const w = node.absoluteBoundingBox?.width ? Math.round(node.absoluteBoundingBox.width) : 16;
         const h = node.absoluteBoundingBox?.height ? Math.round(node.absoluteBoundingBox.height) : 16;
-        return {
+        const iconNode: CleanSpecNode = {
           name: node.name,
           type: 'icon',
           icon: `${node.name} (${w}x${h})`
         };
+        if (node.id) {
+          iconNode.id = node.id;
+        }
+        if (node.componentId && node.componentId !== node.id) {
+          iconNode.componentId = node.componentId;
+        }
+        return iconNode;
       }
     }
 

@@ -14,6 +14,12 @@ function cleanNodeForYaml(node, isRoot = false) {
     if (node.type && node.type !== 'frame') {
         clean.type = node.type;
     }
+    if (node.id) {
+        clean.id = node.id;
+    }
+    if (node.componentId) {
+        clean.componentId = node.componentId;
+    }
     if (node.classes) {
         clean.classes = node.classes;
     }
