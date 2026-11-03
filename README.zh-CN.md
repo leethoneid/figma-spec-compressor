@@ -4,10 +4,13 @@
 
 > 专为 **Google Antigravity、Cursor Composer、Claude Code、Windsurf、Zed / ZCode、OpenAI Codex 与 字节跳动 Trae** 打造的高性能 Token 优化 AST 剪枝引擎、Figma 实时 API 解析工具与标准模型上下文协议（MCP）服务。
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![License: PolyForm Noncommercial 1.0.0](https://img.shields.io/badge/License-PolyForm%20Noncommercial%201.0.0-blue.svg)](LICENSE)
 [![Node: >=20](https://img.shields.io/badge/Node->=20-brightgreen.svg)]()
 [![MCP: 2024-11-05](https://img.shields.io/badge/MCP-2024--11--05-blueviolet.svg)]()
 [![Build Status: Passing](https://img.shields.io/badge/Tests-27%2F27%20Passing-emerald.svg)]()
+
+> [!IMPORTANT]
+> **授权声明**：本开源版仅允许个人学习与非商业使用，公司、团队或任何商业用途必须购买商用版授权，未经授权的商业使用构成侵权。
 
 ---
 
@@ -262,9 +265,9 @@ npx tsc --noEmit
 
 ---
 
-## 开源协议
+## 开源协议与商用授权
 
-- 核心开源引擎遵循 MIT 开源协议。
+- 核心开源引擎遵循 [PolyForm Noncommercial License 1.0.0](LICENSE) 非商业许可协议。
 - 商业加固发行版遵循 [Commercial EULA](COMMERCIAL-EULA.md) 商业授权协议。
 
-MIT © Solo Overseas
+Copyright (c) 2026 Solo Overseas. All rights reserved.

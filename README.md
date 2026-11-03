@@ -4,10 +4,13 @@
 
 > Token-optimized AST pruning, live Figma API fetching, and genuine Model Context Protocol (MCP) server for **Google Antigravity, Cursor Composer, Claude Code, Windsurf, Zed / ZCode, OpenAI Codex, and Trae**.
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![License: PolyForm Noncommercial 1.0.0](https://img.shields.io/badge/License-PolyForm%20Noncommercial%201.0.0-blue.svg)](LICENSE)
 [![Node: >=20](https://img.shields.io/badge/Node->=20-brightgreen.svg)]()
 [![MCP: 2024-11-05](https://img.shields.io/badge/MCP-2024--11--05-blueviolet.svg)]()
 [![Build Status: Passing](https://img.shields.io/badge/Tests-27%2F27%20Passing-emerald.svg)]()
+
+> [!IMPORTANT]
+> **Commercial Use Notice**: This open-source edition is licensed for personal, non-commercial use only. Any use by a company, team, or for commercial purposes requires a commercial license. Unauthorized commercial use constitutes infringement.
 
 ---
 
@@ -262,9 +265,9 @@ npx tsc --noEmit
 
 ---
 
-## License
+## License & Commercial Terms
 
-- Open-source core engine is licensed under the MIT License.
+- Open-source core engine is licensed under the [PolyForm Noncommercial License 1.0.0](LICENSE).
 - Pro Commercial distribution is licensed under the [Commercial EULA](COMMERCIAL-EULA.md).
 
-MIT © Solo Overseas
+Copyright (c) 2026 Solo Overseas. All rights reserved.

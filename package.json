@@ -27,7 +27,7 @@
     "tokens"
   ],
   "author": "Solo Overseas",
-  "license": "MIT",
+  "license": "PolyForm-Noncommercial-1.0.0",
   "dependencies": {
     "commander": "^12.1.0",
     "gpt-tokenizer": "^2.8.1",
