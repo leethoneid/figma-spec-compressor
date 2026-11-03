@@ -1,3 +1,5 @@
+[English](./README.md) | [简体中文](./README.zh-CN.md)
+
 # Figma Spec Compressor (Universal Agent-Ready AST Pruner & MCP Server)
 
 > Token-optimized AST pruning, live Figma API fetching, and genuine Model Context Protocol (MCP) server for **Google Antigravity, Cursor Composer, Claude Code, Windsurf, Zed / ZCode, OpenAI Codex, and Trae**.
@@ -5,7 +7,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Node: >=20](https://img.shields.io/badge/Node->=20-brightgreen.svg)]()
 [![MCP: 2024-11-05](https://img.shields.io/badge/MCP-2024--11--05-blueviolet.svg)]()
-[![Build Status: Passing](https://img.shields.io/badge/Tests-26%2F26%20Passing-emerald.svg)]()
+[![Build Status: Passing](https://img.shields.io/badge/Tests-27%2F27%20Passing-emerald.svg)]()
 
 ---
 
